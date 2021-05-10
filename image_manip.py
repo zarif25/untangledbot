@@ -1,5 +1,4 @@
 import math
-import textwrap
 from PIL import Image, ImageFont, ImageDraw
 
 
@@ -25,7 +24,7 @@ def resize_cover(img, width=1800, height=1000):
     return img
 
 
-def create_template(title, sub_title, src, date, img, theme):
+def create_template(title_wraped, sub_title_wraped, src, date, img, theme):
     # theme selection
     template, fg_primary = {
         'dark':  (Image.open('untangled_post_template_dark.png'), '#efefef'),
@@ -36,8 +35,6 @@ def create_template(title, sub_title, src, date, img, theme):
 
     # formatting
     img = resize_cover(Image.open(img))
-    title_wraped = textwrap.wrap(title, width=38)
-    sub_title_wraped = textwrap.wrap(sub_title, width=48)
 
     # image
     template.paste(img, (100, 870))

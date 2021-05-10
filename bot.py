@@ -1,5 +1,6 @@
 import os
 import time
+import textwrap
 from scrapper import Provider
 from image_manip import create_template
 from imgbb import upload_to_imgbb
@@ -21,14 +22,24 @@ while True:
         if (current_hash == previous_hash):
             break
         title, sub_title, src, date, img = story.get_all()
-        post = create_template(title, sub_title, src, date, img, theme)
+        title_wraped = textwrap.wrap(title, width=38)
+        sub_title_wraped = textwrap.wrap(sub_title, width=48)
+        if len(sub_title_wraped) > 8:
+            sub_title_wraped = sub_title_wraped[:8]
+            i = 7
+            while i>0:
+                if '.' in sub_title_wraped[i]:
+                    sub_title_wraped[i] = sub_title_wraped[i].split('.')[0] + "."
+                    break
+                else:
+                    del sub_title_wraped[i]
+                i -= 1
+        post = create_template(title_wraped, sub_title_wraped, src, date, img, theme)
         img_path = 'posts\\' + current_hash + '.PNG'
         post.save(img_path)
         imgbb_url = upload_to_imgbb(img_path)
         print(imgbb_url)
-
         post_to_fb(imgbb_url, sub_title)
-
         os.remove(img_path)
     
     update_hash(latest_hash)
