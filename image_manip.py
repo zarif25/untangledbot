@@ -4,10 +4,10 @@ from PIL import Image, ImageFont, ImageDraw
 
 
 class Font:
-    bold = ImageFont.truetype("fonts\GilroyBold.ttf", 95)
-    regular = ImageFont.truetype("fonts\GilroyRegular.ttf", 40)
-    black = ImageFont.truetype("fonts\GilroyBlack.ttf", 50)
-    medium = ImageFont.truetype("fonts\GilroyMedium.ttf", 44)
+    bold = ImageFont.truetype("GilroyBold.ttf", 95)
+    regular = ImageFont.truetype("GilroyRegular.ttf", 40)
+    black = ImageFont.truetype("GilroyBlack.ttf", 50)
+    medium = ImageFont.truetype("GilroyMedium.ttf", 44)
 
 
 def resize_cover(img, width=1800, height=1000):
