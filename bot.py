@@ -50,4 +50,6 @@ while True:
 
     update_hash(latest_hash)
     print("done")
-    time.sleep(1800)
+    for i in range(6):
+        print(f"next update in {30-i*5}min")
+        time.sleep(300)
