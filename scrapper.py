@@ -5,9 +5,10 @@ from urllib.parse import urlparse
 
 
 class Story():
-    def __init__(self, url, netlock):
+    def __init__(self, url, netloc):
         print(f"Initializing Story: {url}")
         self.url = url
+        self.netloc = netloc
         self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
         self.title = self.get_title()
         self.description = self.get_description()

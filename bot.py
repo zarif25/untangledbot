@@ -43,10 +43,10 @@ while True:
             title_wraped, description_wraped, src, date, img, theme)
         img_path = 'posts\\' + current_hash + '.PNG'
         post.save(img_path)
-        # imgbb_url = upload_to_imgbb(img_path)
-        # print(imgbb_url)
-        # post_to_fb(imgbb_url, description)
-        # os.remove(img_path)
+        imgbb_url = upload_to_imgbb(img_path)
+        print(imgbb_url)
+        post_to_fb(imgbb_url, description)
+        os.remove(img_path)
 
     update_hash(latest_hash)
     print("done")
