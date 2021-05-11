@@ -1,9 +1,10 @@
-from scrapper import Provider
+from discord.ext import commands
 
-p = Provider("https://bdnews24.com/")
-s = p.scrape_stories()[5]
-s.scrape()
-print(s.get_all())
+client = commands.Bot(command_prefix=".")
 
+@client.command()
+async def info():
+    channel = client.get_channel(841727986351865896)
+    await channel.send()
 
-# Published at 08:38 pm May 11th, 2021\n
+client.run("ODQxNzI1NzIyMTQ1NTg3Mjgw.YJq8Kg.FlkGjHYymiFqDakSXMoePM4oLkQ")

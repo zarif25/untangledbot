@@ -1,12 +1,32 @@
 import os
 import time
-from logger import log_warning, log_info
+from logger import log_warning, log_info, logs
 from scrapper import Provider
 from image_manip import create_template
 from imgbb import upload_to_imgbb
 from fb import post_to_fb
 from news_hash import url_to_hash
 from utils import get_theme
+from discord.ext import commands
+
+client = commands.Bot(command_prefix="show ")
+
+@client.command()
+async def info():
+    channel = client.get_channel(841727986351865896)
+    await channel.send('\n'.join(logs['I']))
+
+@client.command()
+async def warning():
+    channel = client.get_channel(841728105886253106)
+    await channel.send('\n'.join(logs['W']))
+
+@client.command()
+async def error():
+    channel = client.get_channel(841732573411672104)
+    await channel.send('\n'.join(logs['E']))
+
+client.run("ODQxNzI1NzIyMTQ1NTg3Mjgw.YJq8Kg.FlkGjHYymiFqDakSXMoePM4oLkQ")
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_latest_stories()
