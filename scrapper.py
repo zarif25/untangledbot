@@ -66,7 +66,7 @@ class Story():
                 src += ", Dhaka Tribune"
             elif src == None:
                 raise Exception(f"Unknown source {src}")
-            elif not src.endswith(("bdnews24.com", "UNB", "Reuters", "Washington Post", "New York Times")):
+            elif not (src.endswith(("bdnews24.com", "UNB", "Reuters", "Washington Post", "New York Times"))):
                 raise Exception(f"Unknown source {src}")
             return src
         except Exception as e:
@@ -107,7 +107,9 @@ class Story():
             log_warning("problem in image", e)
 
     def __get_src_link(self):
-        if self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
+        if self.src == None:
+            return None
+        elif self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
             return self.url
 
     def get_all(self):
