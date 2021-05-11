@@ -53,7 +53,7 @@ def create_template(title, description, src, date, img, theme):
         description_max_lines = 15 - 2*len(title_wrapped)
     else:
         img = resize_cover(Image.open(img))
-        description_max_char = 52
+        description_max_char = 50
         description_max_lines = 13 - 2*len(title_wrapped)
     description_wrapped = textwrap.wrap(description, width=description_max_char)
     if len(description_wrapped) > description_max_lines:

@@ -7,8 +7,8 @@ from news_hash import url_to_hash
 
 
 previous_hashes = {
-    'bdnews24.com': "hamas-and-israel-exchange-fire-as-jerusalem-unrest-ignites-gaza",
-    'www.dhakatribune.com': ""
+    'bdnews24.com': "global-economic-growth-to-mask-widening-inequality-in-2021-un-says",
+    'www.dhakatribune.com': "ailing-khaleda-has-only-one-way-left-to-travel-abroad"
 }
 
 class Story():
@@ -52,16 +52,21 @@ class Story():
             if self.netloc == 'bdnews24.com':
                 src = self.soup.find(class_='authorName')
                 if not (src and src.text):
-                    src = self.soup.find(
-                        id='article_notations').p.text.split(', ')[-1].strip()
+                    src = self.soup.find(id='article_notations').p.text
                 else:
                     src = src.text
                 src = src.strip(' >')
                 if src == '':
                     src = 'bdnews24.com'
-                return src
             elif self.netloc == 'www.dhakatribune.com':
-                return self.soup.a.text.strip('\n')
+                src = self.soup.a.text.strip('\n')
+            if src in ["Tribune Desk", "Showtime Desk", "Tribune Report"]:
+                src = "Dhaka Tribune"
+            elif src in ["Salma Nasreen"]:
+                src += ", Dhaka Tribune"
+            elif not src.endswith(("bdnews24.com", "UNB", "Reuters", "Washington Post", "New York Times")):
+                raise Exception(f"Unknown source {src}")
+            return src
         except Exception as e:
             log_error("problem in source", e)
 
@@ -100,7 +105,7 @@ class Story():
             log_warning("problem in image", e)
 
     def __get_src_link(self):
-        if self.src == 'bdnews24.com':
+        if self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
             return self.url
 
     def get_all(self):

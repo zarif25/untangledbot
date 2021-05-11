@@ -6,13 +6,12 @@ from image_manip import create_template
 from imgbb import upload_to_imgbb
 from fb import post_to_fb
 from news_hash import url_to_hash
+from utils import get_theme
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_latest_stories()
     stories += Provider('https://www.dhakatribune.com/').scrape_latest_stories()
-    t_hour = (time.localtime().tm_hour + 6) % 24
-    theme = 'light' if 3 <= t_hour <= 18 else 'dark'
-
+    theme = get_theme()
 
     for story in stories:
         story.scrape()
@@ -21,7 +20,7 @@ while True:
         if post == None:
             log_warning("problem in one of the parameters of this story", story.url)
             continue
-        img_path = 'posts\\' + url_to_hash(story.url) + '.PNG'
+        img_path = f'posts\\{url_to_hash(story.url)}.PNG'
         post.save(img_path)
         imgbb_url = upload_to_imgbb(img_path)
         if src_url != None:
