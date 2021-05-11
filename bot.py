@@ -26,11 +26,8 @@ async def error():
     channel = client.get_channel(841732573411672104)
     await channel.send('\n'.join(logs['E']))
 
-key = "ODQxNzI"
-key += "1NzIyMTQ1NT"
-key += "g3Mjgw.YJq8K"
-key += "g.g_gp-Je5L2Cs"
-key += "mMz49cD9X3g6FPA"
+with open("key.txt", 'r') as rf:
+    key = rf.read()
 
 client.run(key)
 
