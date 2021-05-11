@@ -23,10 +23,10 @@ while True:
             continue
         img_path = f'posts\\{url_to_hash(story.url)}.PNG'
         post.save(img_path)
-        imgbb_url = upload_to_imgbb(img_path)
-        if src_url != None:
-            description += f"\nSource: {src_url}"
-        post_to_fb(imgbb_url, description)
+        # imgbb_url = upload_to_imgbb(img_path)
+        # if src_url != None:
+        #     description += f"\nSource: {src_url}"
+        # post_to_fb(imgbb_url, description)
         os.remove(img_path)
 
     log_info("done", sep="")
