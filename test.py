@@ -1,17 +1,9 @@
-from image_manip import create_template
-import requests
+from scrapper import Provider
 
-title = "sssssSssssSssssssSssssSssssssSssssSssssssSssssSsa"
-description = "ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. "
+p = Provider("https://bdnews24.com/")
+s = p.scrape_stories()[5]
+s.scrape()
+print(s.get_all())
 
-src = "The New York Times"
 
-date = "17 May, 2021"
-
-img = requests.get(
-    "https://d30fl32nd2baj9.cloudfront.net/media/2019/03/27/ak-momen-aam-03272019-0008.jpg/ALTERNATES/w640/AK-Momen-aam-03272019-0008.jpg",
-    stream=True
-).raw
-
-post = create_template(title, description, src, date, None, 'dark')
-post.save('test.png')
+# Published at 08:38 pm May 11th, 2021\n
