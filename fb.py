@@ -16,4 +16,4 @@ def post_to_fb(img_url, description):
 
     r = requests.post(
         f'https://graph.facebook.com/{page_id}/photos', data=img_payload)
-    logging.info(f"uploaded to fb | {r.text['id']}")
+    logging.info(f"uploaded to fb | {r.text}")
