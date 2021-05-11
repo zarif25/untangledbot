@@ -30,24 +30,29 @@ class Story():
         self.src_link = self.__get_src_link()
 
     def __get_title(self):
+        title = None
         try:
             if self.netloc == 'bdnews24.com':
-                return self.soup.find(id='news-details-page').h1.text
+                title = self.soup.find(id='news-details-page').h1.text
             elif self.netloc == 'www.dhakatribune.com':
-                return self.soup.h1.text
+                title = self.soup.h1.text
         except Exception as e:
             log_error("problem in title", e)
+        return title
 
     def __get_description(self):
+        description = None
         try:
             if self.netloc == 'bdnews24.com':
-                return self.soup.find(class_='article_lead_text').h5.text
+                description = self.soup.find(class_='article_lead_text').h5.text
             elif self.netloc == 'www.dhakatribune.com':
-                return self.soup.find(class_="highlighted-content").p.text
+                description = self.soup.find(class_="highlighted-content").p.text
         except Exception as e:
             log_error("problem in description", e)
+        return description
 
     def __get_src(self):
+        src = None
         try:
             if self.netloc == 'bdnews24.com':
                 src = self.soup.find(class_='authorName')
@@ -59,15 +64,16 @@ class Story():
                 if src == '':
                     src = 'bdnews24.com'
             elif self.netloc == 'www.dhakatribune.com':
-                src = self.soup.a.text.strip('\n')
+                src = self.soup.a.text
+            src = src.strip(" >\n")
             
             if src in ["Tribune Desk", "Showtime Desk", "Tribune Report"]:
                 src = "Dhaka Tribune"
             elif src in ["Salma Nasreen", "Bilkis Irani", "Manoj Kumar Saha, Gopalganj"]:
                 src += ", Dhaka Tribune"
-            return src
         except Exception as e:
             log_error("problem in source", e)
+        return src
 
     def __get_date(self):
         try:
