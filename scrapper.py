@@ -107,9 +107,7 @@ class Story():
             log_warning("problem in image", e)
 
     def __get_src_link(self):
-        if self.src == None:
-            return None
-        elif self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
+        if self.src != None and self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
             return self.url
 
     def get_all(self):
