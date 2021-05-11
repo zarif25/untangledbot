@@ -1,42 +1,42 @@
 import requests
-import logging
+from logger import log_error, log_warning, log_info
 from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urlparse
 
-logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
 
 class Story():
     def __init__(self, url, netloc):
-        logging.info(f"INITIALIZING STORY: {url}")
+        log_info("INITIALIZING STORY", url)
         self.url = url
         self.netloc = netloc
         self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
 
-    def get_title(self):
+    def scrape(self):
+        log_info("SCRAPING", self.url)
+        self.title = self.__get_title()
+        self.description = self.__get_description()
+        self.src = self.__get_src()
+        self.date = self.__get_date()
+        self.img = self.__get_img()
+        
+
+    def __get_title(self):
         try:
             if self.netloc == 'bdnews24.com':
                 return self.soup.find(id='news-details-page').h1.text
-            else:
-                raise Exception(
-                    f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(
-                f"something seems wrong with the title in this story | {e}")
+            log_error("problem in title", e)
 
-    def get_description(self):
+    def __get_description(self):
         try:
             if self.netloc == 'bdnews24.com':
                 return self.soup.find(class_='article_lead_text').h5.text
-            else:
-                raise Exception(
-                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(
-                f"something seems wrong with the description in this story | {e}")
+            log_error("problem in description", e)
 
-    def get_src(self):
+    def __get_src(self):
         try:
             if self.netloc == 'bdnews24.com':
                 src = self.soup.find(class_='authorName')
@@ -49,14 +49,10 @@ class Story():
                 if src == '':
                     src = 'bdnews24.com'
                 return src
-            else:
-                raise Exception(
-                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(
-                f"something seems wrong with the source in this story | {e}")
+            log_error("problem in source", e)
 
-    def get_date(self):
+    def __get_date(self):
         try:
             if self.netloc == 'bdnews24.com':
                 return datetime.strptime(
@@ -68,14 +64,10 @@ class Story():
                     .strip(),
                     '%d %b %Y'
                 ).strftime("%A, %b %d, %Y")
-            else:
-                raise Exception(
-                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(
-                f"something seems wrong with the date in this story | {e}")
+            log_error("problem in date", e)
 
-    def get_img(self):
+    def __get_img(self):
         try:
             if self.netloc == 'bdnews24.com':
                 return requests.get(
@@ -85,32 +77,27 @@ class Story():
                     .img['src'],
                     stream=True
                 ).raw
-            else:
-                raise Exception(
-                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(
-                f"something seems wrong with the image in this story | {e}")
+            log_warning("problem in image", e)
 
     def get_all(self):
-        logging.info(f"SCRAPING: {self.url}")
         return (
-            self.get_title(),
-            self.get_description(),
-            self.get_src(),
-            self.get_date(),
-            self.get_img(),
+            self.title,
+            self.description,
+            self.src,
+            self.date,
+            self.img
         )
 
 
 class Provider():
     def __init__(self, url):
         self.netloc = urlparse(url).netloc
-        logging.info(f"INITIALIZING PROVIDER: {self.netloc}")
+        log_info("INITIALIZING PROVIDER", self.netloc)
         self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
 
     def scrape_stories(self):
-        logging.info(f"SCRAPING: {self.netloc}")
+        log_info("SCRAPING", self.netloc)
         try:
             if self.netloc == 'bdnews24.com':
                 a_tags = self.soup.find(
@@ -121,6 +108,5 @@ class Provider():
                 raise Exception(
                     "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(
-                f"something seems wrong with the recent stories in this provider | {e}")
-        return []
+            log_error("problem in recent stories", e)
+        return [] #TODO: what happens when this is returned?

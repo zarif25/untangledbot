@@ -1,8 +1,6 @@
 import requests
 import base64
-import logging
-
-logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
+from logger import log_info
 
 
 def upload_to_imgbb(path):
@@ -15,5 +13,5 @@ def upload_to_imgbb(path):
         }
         res = requests.post(url, payload)
         uploaded_url = res.json()['data']['url']
-        logging.info(f"uploaded to imgbb | {uploaded_url}")
+        log_info("uploaded", f"to imgbb | {uploaded_url}")
         return uploaded_url

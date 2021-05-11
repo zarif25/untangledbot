@@ -1,12 +1,13 @@
 import math
+import textwrap
 from PIL import Image, ImageFont, ImageDraw
 
 
 class Font:
+    black = ImageFont.truetype("GilroyBlack.ttf", 45)
     bold = ImageFont.truetype("GilroyBold.ttf", 95)
-    regular = ImageFont.truetype("GilroyRegular.ttf", 40)
-    black = ImageFont.truetype("GilroyBlack.ttf", 50)
     medium = ImageFont.truetype("GilroyMedium.ttf", 44)
+    regular = ImageFont.truetype("GilroyRegular.ttf", 40)
 
 
 def resize_cover(img, width=1800, height=1000):
@@ -24,33 +25,70 @@ def resize_cover(img, width=1800, height=1000):
     return img
 
 
-def create_template(title_wraped, description_wraped, src, date, img, theme):
+def create_template(title, description, src, date, img, theme):
+
+    if None in [title, description, src, date]:
+        return None
+
     # theme selection
-    template, fg_primary = {
-        'dark':  (Image.open('untangled_post_template_dark.png'), '#efefef'),
-        'light': (Image.open('untangled_post_template_light.png'), '#191919')
+    fg_primary = {
+        'dark':  '#efefef',
+        'light': '#191919'
     }[theme]
-    
+    if img == None:
+        template = {
+            'dark':  Image.open('untangled_post_template_text_only_dark.png'),
+            'light': Image.open('untangled_post_template_text_only_light.png')
+        }[theme]
+    else:
+        template = {
+            'dark':  Image.open('untangled_post_template_dark.png'),
+            'light': Image.open('untangled_post_template_light.png')
+        }[theme]
+
     # formatting
-    img = resize_cover(Image.open(img))
+    title_wrapped = textwrap.wrap(title, width=37)
+    if img==None:
+        description_max_char = 81
+        description_max_lines = 15 - 2*len(title_wrapped)
+    else:
+        img = resize_cover(Image.open(img))
+        description_max_char = 52
+        description_max_lines = 13 - 2*len(title_wrapped)
+    description_wrapped = textwrap.wrap(description, width=description_max_char)
+    if len(description_wrapped) > description_max_lines:
+        description_wrapped = description_wrapped[:description_max_lines]
+        i = description_max_lines-1
+        while i >= 0:
+            if '.' in description_wrapped[i]:
+                description_wrapped[i] = '.'.join(
+                    description_wrapped[i].split('.')[:-1]) + "."
+                break
+            else:
+                del description_wrapped[i]
+            i -= 1
 
     # image
-    template.paste(img, (100, 870))
+    if img != None:
+        template.paste(img, (100, 870))
 
     # spacing
-    height_for_next_element = 100
+    if img == None:
+        height_for_next_element = 1050
+    else:
+        height_for_next_element = 100
     spacing_factor = 0
-    if len(title_wraped) <= 2:
-        if len(description_wraped) <= 5:
+    if len(title_wrapped) <= 2:
+        if len(description_wrapped) <= 5:
             spacing_factor = 30
-        elif len(description_wraped) <= 6:
+        elif len(description_wrapped) <= 6:
             spacing_factor = 25
 
     # ready to draw
     draw = ImageDraw.Draw(template)
 
     # title
-    for str in title_wraped:
+    for str in title_wrapped:
         draw.text(
             (100, height_for_next_element),
             str,
@@ -58,7 +96,7 @@ def create_template(title_wraped, description_wraped, src, date, img, theme):
             font=Font.bold
         )
         height_for_next_element += 100
-    height_for_next_element += 30 + spacing_factor
+    height_for_next_element += spacing_factor
 
     # date
     draw.text(
@@ -67,7 +105,27 @@ def create_template(title_wraped, description_wraped, src, date, img, theme):
         fill=fg_primary,
         font=Font.regular
     )
-    height_for_next_element += 50
+    height_for_next_element += 70
+
+    # sub title
+    rect_width = 15
+    rect_height = len(description_wrapped)*50
+    rect_shape = [
+        (100, height_for_next_element),
+        (rect_width+100, rect_height+height_for_next_element)
+    ]
+    height_for_next_element += 5
+    draw.rectangle(rect_shape, fill="#868686")
+    for str in description_wrapped:
+        draw.text(
+            (130, height_for_next_element),
+            str,
+            fill=fg_primary,
+            font=Font.medium
+        )
+        height_for_next_element += 50
+
+    height_for_next_element = 1910
 
     # source
     draw.text(
@@ -77,23 +135,5 @@ def create_template(title_wraped, description_wraped, src, date, img, theme):
         font=Font.black
     )
     height_for_next_element += 80 + spacing_factor
-
-    # sub title
-    rect_width = 15
-    rect_height = len(description_wraped)*50
-    rect_shape = [
-        (100, height_for_next_element),
-        (rect_width+100, rect_height+height_for_next_element)
-    ]
-    height_for_next_element += 5
-    draw.rectangle(rect_shape, fill="#868686")
-    for str in description_wraped:
-        draw.text(
-            (130, height_for_next_element),
-            str,
-            fill=fg_primary,
-            font=Font.medium
-        )
-        height_for_next_element += 50
 
     return template

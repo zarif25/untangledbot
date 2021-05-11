@@ -1,14 +1,11 @@
 import os
 import time
-import textwrap
-import logging
+from logger import log_warning, log_info
 from scrapper import Provider
 from image_manip import create_template
 from imgbb import upload_to_imgbb
 from fb import post_to_fb
 from news_hash import update_hash, get_prev_hash, url_to_hash
-
-logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_stories()
@@ -17,34 +14,19 @@ while True:
 
     # hashing
     latest_hash = url_to_hash(stories[0].url)
-    logging.info(f'latest hash: {latest_hash}')
+    log_info('latest hash', latest_hash)
     previous_hash = get_prev_hash()
-    logging.info(f'previous hash: {previous_hash}')
+    log_info('previous hash', previous_hash)
 
     for story in stories:
         current_hash = url_to_hash(story.url)
-        if (current_hash == previous_hash):
-            break
+        if (current_hash == previous_hash): break
+        story.scrape()
         title, description, src, date, img = story.get_all()
-        if None in [title, description, src, date, img]:
-            logging.info(
-                f"problem in one of the parameters of this story: {story.url}")
+        post = create_template(title, description, src, date, img, theme)
+        if post == None:
+            log_warning("problem in one of the parameters of this story", story.url)
             continue
-        title_wraped = textwrap.wrap(title, width=38)
-        description_wraped = textwrap.wrap(description, width=48)
-        if len(description_wraped) > 7:
-            description_wraped = description_wraped[:7]
-            i = 6
-            while i > 0:
-                if '.' in description_wraped[i]:
-                    description_wraped[i] = description_wraped[i].split('.')[
-                        0] + "."
-                    break
-                else:
-                    del description_wraped[i]
-                i -= 1
-        post = create_template(
-            title_wraped, description_wraped, src, date, img, theme)
         img_path = 'posts\\' + current_hash + '.PNG'
         post.save(img_path)
         imgbb_url = upload_to_imgbb(img_path)
@@ -52,7 +34,7 @@ while True:
         os.remove(img_path)
 
     update_hash(latest_hash)
-    logging.info("done")
+    log_info("done")
     for i in range(6):
-        logging.info(f"next update in {30-i*5}min")
+        log_info("NEXT UPDATE", f"after {30-i*5}min")
         time.sleep(300)
