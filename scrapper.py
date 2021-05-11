@@ -7,7 +7,7 @@ from news_hash import url_to_hash
 
 
 previous_hashes = {
-    'bdnews24.com': "",
+    'bdnews24.com': "hamas-and-israel-exchange-fire-as-jerusalem-unrest-ignites-gaza",
     'www.dhakatribune.com': ""
 }
 
