@@ -82,7 +82,7 @@ class Story():
             log_warning("problem in image", e)
 
     def __get_src_link(self):
-        if self.netloc == 'bdnews24.com':
+        if self.src == 'bdnews24.com':
             return self.url
 
     def get_all(self):
