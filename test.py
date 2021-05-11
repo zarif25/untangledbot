@@ -2,7 +2,7 @@ from image_manip import create_template
 import requests
 
 title = "sssssSssssSssssssSssssSssssssSssssSssssssSssssSsa"
-description = "ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. "
+description = "ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. ssss ssss. "
 
 src = "The New York Times"
 
@@ -13,5 +13,5 @@ img = requests.get(
     stream=True
 ).raw
 
-post = create_template(title, description*2, src, date, None, 'dark')
+post = create_template(title, description, src, date, None, 'dark')
 post.save('test.png')

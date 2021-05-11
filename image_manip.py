@@ -75,14 +75,24 @@ def create_template(title, description, src, date, img, theme):
     # spacing
     if img == None:
         height_for_next_element = 1050
+        writtable_height = 850
     else:
         height_for_next_element = 100
-    spacing_factor = 0
-    if len(title_wrapped) <= 2:
-        if len(description_wrapped) <= 5:
-            spacing_factor = 30
-        elif len(description_wrapped) <= 6:
-            spacing_factor = 25
+        writtable_height = 720
+
+    title_height = len(title_wrapped)*100
+    date_height = 70
+    description_height = len(description_wrapped)*50
+
+    spacing_factor = writtable_height - (
+        title_height +
+        date_height +
+        description_height
+    )
+    print(spacing_factor)
+
+    if spacing_factor < 0: spacing_factor = 0
+    elif spacing_factor > 100: spacing_factor = 100
 
     # ready to draw
     draw = ImageDraw.Draw(template)
@@ -96,7 +106,7 @@ def create_template(title, description, src, date, img, theme):
             font=Font.bold
         )
         height_for_next_element += 100
-    height_for_next_element += spacing_factor
+    height_for_next_element += spacing_factor/3
 
     # date
     draw.text(
@@ -105,11 +115,11 @@ def create_template(title, description, src, date, img, theme):
         fill=fg_primary,
         font=Font.regular
     )
-    height_for_next_element += 70
+    height_for_next_element += 70 + spacing_factor/2
 
-    # sub title
+    # description
     rect_width = 15
-    rect_height = len(description_wrapped)*50
+    rect_height = description_height
     rect_shape = [
         (100, height_for_next_element),
         (rect_width+100, rect_height+height_for_next_element)
@@ -134,6 +144,5 @@ def create_template(title, description, src, date, img, theme):
         fill=fg_primary,
         font=Font.black
     )
-    height_for_next_element += 80 + spacing_factor
 
     return template

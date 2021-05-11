@@ -20,6 +20,7 @@ class Story():
         self.src = self.__get_src()
         self.date = self.__get_date()
         self.img = self.__get_img()
+        self.src_link = self.__get_src_link()
         
 
     def __get_title(self):
@@ -80,13 +81,18 @@ class Story():
         except Exception as e:
             log_warning("problem in image", e)
 
+    def __get_src_link(self):
+        if self.netloc == urlparse(self.url).netloc:
+            return self.url
+
     def get_all(self):
         return (
             self.title,
             self.description,
             self.src,
             self.date,
-            self.img
+            self.img,
+            self.src_link
         )
 
 

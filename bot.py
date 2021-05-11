@@ -22,7 +22,7 @@ while True:
         current_hash = url_to_hash(story.url)
         if (current_hash == previous_hash): break
         story.scrape()
-        title, description, src, date, img = story.get_all()
+        title, description, src, date, img, src_url = story.get_all()
         post = create_template(title, description, src, date, img, theme)
         if post == None:
             log_warning("problem in one of the parameters of this story", story.url)
@@ -30,6 +30,8 @@ while True:
         img_path = 'posts\\' + current_hash + '.PNG'
         post.save(img_path)
         imgbb_url = upload_to_imgbb(img_path)
+        if src_url != None:
+            description += f"\nSource: {src_url}"
         post_to_fb(imgbb_url, description)
         os.remove(img_path)
 
