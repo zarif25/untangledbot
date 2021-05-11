@@ -63,9 +63,9 @@ class Story():
                 src = src.strip(' >\n')
                 if src == '':
                     src = 'bdnews24.com'
+                src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
             elif self.netloc == 'www.dhakatribune.com':
-                src = self.soup.a.text
-            src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
+                src = self.soup.a.text.strip(" \n")
             
             if src in ["Tribune Desk", "Showtime Desk", "Tribune Report"]:
                 src = "Dhaka Tribune"
@@ -73,7 +73,6 @@ class Story():
                 src += ", Dhaka Tribune"
         except Exception as e:
             log_error("problem in source", e)
-        print(src)
         return src
 
     def __get_date(self):
