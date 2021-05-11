@@ -9,7 +9,8 @@ from news_hash import update_hash, get_prev_hash, url_to_hash
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_stories()
-    theme = 'light' if 3 <= time.localtime().tm_hour <= 18 else 'dark'
+    t_hour = (time.localtime().tm_hour + 6) % 24
+    theme = 'light' if 3 <= t_hour <= 18 else 'dark'
 
     # hashing
     latest_hash = url_to_hash(stories[0].url)
