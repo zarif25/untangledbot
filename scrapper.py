@@ -55,7 +55,7 @@ class Story():
                     src = self.soup.find(id='article_notations').p.text
                 else:
                     src = src.text
-                src = src.strip(' >')
+                src = src.strip(' >\n')
                 if src == '':
                     src = 'bdnews24.com'
             elif self.netloc == 'www.dhakatribune.com':
@@ -63,7 +63,7 @@ class Story():
             
             if src in ["Tribune Desk", "Showtime Desk", "Tribune Report"]:
                 src = "Dhaka Tribune"
-            elif src in ["Salma Nasreen"]:
+            elif src in ["Salma Nasreen", "Bilkis Irani", "Manoj Kumar Saha, Gopalganj"]:
                 src += ", Dhaka Tribune"
             return src
         except Exception as e:

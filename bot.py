@@ -29,7 +29,7 @@ while True:
         post_to_fb(imgbb_url, description)
         os.remove(img_path)
 
-    log_info("done")
+    log_info("done", sep="")
     for i in range(6):
         log_info("NEXT UPDATE", f"after {30-i*5}min")
         time.sleep(300)
