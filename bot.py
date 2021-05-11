@@ -1,45 +1,13 @@
 import os
 import time
-from logger import log_warning, log_info, logs
+from logger import log_warning, log_info
 from scrapper import Provider
 from image_manip import create_template
 from imgbb import upload_to_imgbb
 from fb import post_to_fb
 from news_hash import url_to_hash
 from utils import get_theme
-from discord.ext import commands
 
-client = commands.Bot(command_prefix=".")
-
-@client.command()
-async def info(ctx):
-    msg = '\n'.join(logs['I'])
-    logs['I'] = []
-    if not msg:
-        msg = "No info to show"
-    await ctx.send(msg)
-
-@client.command()
-async def warning(ctx):
-    msg = '\n'.join(logs['W'])
-    logs['W'] = []
-    if not msg:
-        msg = "No warning to show"
-    await ctx.send(msg)
-
-
-@client.command()
-async def error(ctx):
-    msg = '\n'.join(logs['E'])
-    logs['E'] = []
-    if not msg:
-        msg = "No error to show"
-    await ctx.send(msg)
-
-
-key = os.getenv('DISKEY')
-
-client.run(key)
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_latest_stories()
