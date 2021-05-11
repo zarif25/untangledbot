@@ -7,8 +7,8 @@ from news_hash import url_to_hash
 
 
 previous_hashes = {
-    'bdnews24.com': "global-economic-growth-to-mask-widening-inequality-in-2021-un-says",
-    'www.dhakatribune.com': "ailing-khaleda-has-only-one-way-left-to-travel-abroad"
+    'bdnews24.com': "",
+    'www.dhakatribune.com': ""
 }
 
 class Story():
@@ -60,14 +60,11 @@ class Story():
                     src = 'bdnews24.com'
             elif self.netloc == 'www.dhakatribune.com':
                 src = self.soup.a.text.strip('\n')
+            
             if src in ["Tribune Desk", "Showtime Desk", "Tribune Report"]:
                 src = "Dhaka Tribune"
             elif src in ["Salma Nasreen"]:
                 src += ", Dhaka Tribune"
-            elif src == None:
-                raise Exception(f"Unknown source {src}")
-            elif not (src.endswith(("bdnews24.com", "UNB", "Reuters", "Washington Post", "New York Times"))):
-                raise Exception(f"Unknown source {src}")
             return src
         except Exception as e:
             log_error("problem in source", e)
