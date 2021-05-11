@@ -25,7 +25,6 @@ while True:
         if None in [title, sub_title, src, date, img]:
             print(f"Error: problem in one of the parameters of this story: {story.url}")
             continue
-        src = '<debugging>'
         title_wraped = textwrap.wrap(title, width=38)
         sub_title_wraped = textwrap.wrap(sub_title, width=48)
         if len(sub_title_wraped) > 8:
