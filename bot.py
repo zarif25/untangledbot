@@ -28,9 +28,9 @@ while True:
             continue
         title_wraped = textwrap.wrap(title, width=38)
         description_wraped = textwrap.wrap(description, width=48)
-        if len(description_wraped) > 8:
-            description_wraped = description_wraped[:8]
-            i = 7
+        if len(description_wraped) > 7:
+            description_wraped = description_wraped[:7]
+            i = 6
             while i > 0:
                 if '.' in description_wraped[i]:
                     description_wraped[i] = description_wraped[i].split('.')[
