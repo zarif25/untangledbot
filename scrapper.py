@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urlparse
 
-logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.DEBUG)
+logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
+
 
 class Story():
     def __init__(self, url, netloc):
@@ -18,18 +19,22 @@ class Story():
             if self.netloc == 'bdnews24.com':
                 return self.soup.find(id='news-details-page').h1.text
             else:
-                raise Exception(f"ERROR: you never taught me how to scrape this provider :(")
+                raise Exception(
+                    f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(f"something seems wrong with the title in this story | {e}")
+            logging.error(
+                f"something seems wrong with the title in this story | {e}")
 
     def get_description(self):
         try:
             if self.netloc == 'bdnews24.com':
                 return self.soup.find(class_='article_lead_text').h5.text
             else:
-                raise Exception("you never taught me how to scrape this provider :(")
+                raise Exception(
+                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(f"something seems wrong with the description in this story | {e}")
+            logging.error(
+                f"something seems wrong with the description in this story | {e}")
 
     def get_src(self):
         try:
@@ -45,9 +50,11 @@ class Story():
                     src = 'bdnews24.com'
                 return src
             else:
-                raise Exception("you never taught me how to scrape this provider :(")
+                raise Exception(
+                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(f"something seems wrong with the source in this story | {e}")
+            logging.error(
+                f"something seems wrong with the source in this story | {e}")
 
     def get_date(self):
         try:
@@ -62,9 +69,11 @@ class Story():
                     '%d %b %Y'
                 ).strftime("%A, %b %d, %Y")
             else:
-                raise Exception("you never taught me how to scrape this provider :(")
+                raise Exception(
+                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(f"something seems wrong with the date in this story | {e}")
+            logging.error(
+                f"something seems wrong with the date in this story | {e}")
 
     def get_img(self):
         try:
@@ -77,9 +86,11 @@ class Story():
                     stream=True
                 ).raw
             else:
-                raise Exception("you never taught me how to scrape this provider :(")
+                raise Exception(
+                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(f"something seems wrong with the image in this story | {e}")
+            logging.error(
+                f"something seems wrong with the image in this story | {e}")
 
     def get_all(self):
         logging.info(f"SCRAPING: {self.url}")
@@ -102,11 +113,14 @@ class Provider():
         logging.info(f"SCRAPING: {self.netloc}")
         try:
             if self.netloc == 'bdnews24.com':
-                a_tags = self.soup.find(id='homepagetabs-tabs-2-2').find_all('a')
+                a_tags = self.soup.find(
+                    id='homepagetabs-tabs-2-2').find_all('a')
                 urls = [a_tag['href'] for a_tag in a_tags]
                 return [Story(url, self.netloc) for url in urls if not url.startswith('https://opinion')]
             else:
-                raise Exception("you never taught me how to scrape this provider :(")
+                raise Exception(
+                    "you never taught me how to scrape this provider :(")
         except Exception as e:
-            logging.error(f"something seems wrong with the recent stories in this provider | {e}")
+            logging.error(
+                f"something seems wrong with the recent stories in this provider | {e}")
         return []

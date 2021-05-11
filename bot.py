@@ -8,7 +8,7 @@ from imgbb import upload_to_imgbb
 from fb import post_to_fb
 from news_hash import update_hash, get_prev_hash, url_to_hash
 
-logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.DEBUG)
+logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_stories()
@@ -27,7 +27,8 @@ while True:
             break
         title, description, src, date, img = story.get_all()
         if None in [title, description, src, date, img]:
-            logging.info(f"problem in one of the parameters of this story: {story.url}")
+            logging.info(
+                f"problem in one of the parameters of this story: {story.url}")
             continue
         title_wraped = textwrap.wrap(title, width=38)
         description_wraped = textwrap.wrap(description, width=48)

@@ -2,7 +2,8 @@ import requests
 import base64
 import logging
 
-logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.DEBUG)
+logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
+
 
 def upload_to_imgbb(path):
     with open(path, "rb") as file:
