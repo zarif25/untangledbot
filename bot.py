@@ -12,19 +12,25 @@ from discord.ext import commands
 client = commands.Bot(command_prefix=".")
 
 @client.command()
-async def info():
+async def info(ctx):
     channel = client.get_channel(841727986351865896)
-    await channel.send('\n'.join(logs['I']))
+    msg = '\n'.join(logs['I'])
+    logs['I'] = []
+    await channel.send(msg)
 
 @client.command()
-async def warning():
+async def warning(ctx):
     channel = client.get_channel(841728105886253106)
-    await channel.send('\n'.join(logs['W']))
+    msg = '\n'.join(logs['W'])
+    logs['W'] = []
+    await channel.send(msg)
 
 @client.command()
-async def error():
+async def error(ctx):
     channel = client.get_channel(841732573411672104)
-    await channel.send('\n'.join(logs['E']))
+    msg = '\n'.join(logs['E'])
+    logs['E'] = []
+    await channel.send(msg)
 
 key = os.getenv('DISKEY')
 
