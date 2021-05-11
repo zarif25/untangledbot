@@ -17,7 +17,7 @@ async def info(ctx):
     # msg = '\n'.join(logs['I'])
     # logs['I'] = []
     # await channel.send(msg)
-    ctx.send("tumi golapi")
+    await ctx.send("tumi golapi")
 
 @client.command()
 async def warning(ctx):
@@ -25,7 +25,7 @@ async def warning(ctx):
     # msg = '\n'.join(logs['W'])
     # logs['W'] = []
     # await channel.send(msg)
-    ctx.send("tumi golapi")
+    await ctx.send("tumi golapi")
 
 
 @client.command()
@@ -34,7 +34,7 @@ async def error(ctx):
     # msg = '\n'.join(logs['E'])
     # logs['E'] = []
     # await channel.send(msg)
-    ctx.send("tumi golapi")
+    await ctx.send("tumi golapi")
 
 
 key = os.getenv('DISKEY')
