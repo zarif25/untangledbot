@@ -9,7 +9,7 @@ from news_hash import url_to_hash
 from utils import get_theme
 from discord.ext import commands
 
-client = commands.Bot(command_prefix="show ")
+client = commands.Bot(command_prefix=".")
 
 @client.command()
 async def info():
