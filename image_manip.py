@@ -24,7 +24,7 @@ def resize_cover(img, width=1800, height=1000):
     return img
 
 
-def create_template(title_wraped, sub_title_wraped, src, date, img, theme):
+def create_template(title_wraped, description_wraped, src, date, img, theme):
     # theme selection
     template, fg_primary = {
         'dark':  (Image.open('untangled_post_template_dark.png'), '#efefef'),
@@ -43,9 +43,9 @@ def create_template(title_wraped, sub_title_wraped, src, date, img, theme):
     height_for_next_element = 100
     spacing_factor = 0
     if len(title_wraped) <= 2:
-        if len(sub_title_wraped) <= 5:
+        if len(description_wraped) <= 5:
             spacing_factor = 30
-        elif len(sub_title_wraped) <= 6:
+        elif len(description_wraped) <= 6:
             spacing_factor = 25
 
     # ready to draw
@@ -82,14 +82,14 @@ def create_template(title_wraped, sub_title_wraped, src, date, img, theme):
 
     # sub title
     rect_width = 15
-    rect_height = len(sub_title_wraped)*50
+    rect_height = len(description_wraped)*50
     rect_shape = [
         (100, height_for_next_element),
         (rect_width+100, rect_height+height_for_next_element)
     ]
     height_for_next_element += 5
     draw.rectangle(rect_shape, fill="#868686")
-    for str in sub_title_wraped:
+    for str in description_wraped:
         draw.text(
             (130, height_for_next_element),
             str,

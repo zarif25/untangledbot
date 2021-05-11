@@ -22,31 +22,31 @@ while True:
         current_hash = url_to_hash(story.url)
         if (current_hash == previous_hash):
             break
-        title, sub_title, src, date, img = story.get_all()
-        if None in [title, sub_title, src, date, img]:
+        title, description, src, date, img = story.get_all()
+        if None in [title, description, src, date, img]:
             print(f"Error: problem in one of the parameters of this story: {story.url}")
             continue
         title_wraped = textwrap.wrap(title, width=38)
-        sub_title_wraped = textwrap.wrap(sub_title, width=48)
-        if len(sub_title_wraped) > 8:
-            sub_title_wraped = sub_title_wraped[:8]
+        description_wraped = textwrap.wrap(description, width=48)
+        if len(description_wraped) > 8:
+            description_wraped = description_wraped[:8]
             i = 7
             while i > 0:
-                if '.' in sub_title_wraped[i]:
-                    sub_title_wraped[i] = sub_title_wraped[i].split('.')[
+                if '.' in description_wraped[i]:
+                    description_wraped[i] = description_wraped[i].split('.')[
                         0] + "."
                     break
                 else:
-                    del sub_title_wraped[i]
+                    del description_wraped[i]
                 i -= 1
         post = create_template(
-            title_wraped, sub_title_wraped, src, date, img, theme)
+            title_wraped, description_wraped, src, date, img, theme)
         img_path = 'posts\\' + current_hash + '.PNG'
         post.save(img_path)
-        imgbb_url = upload_to_imgbb(img_path)
-        print(imgbb_url)
-        post_to_fb(imgbb_url, sub_title)
-        os.remove(img_path)
+        # imgbb_url = upload_to_imgbb(img_path)
+        # print(imgbb_url)
+        # post_to_fb(imgbb_url, description)
+        # os.remove(img_path)
 
     update_hash(latest_hash)
     print("done")
