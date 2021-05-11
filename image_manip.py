@@ -89,7 +89,6 @@ def create_template(title, description, src, date, img, theme):
         date_height +
         description_height
     )
-    print(spacing_factor)
 
     if spacing_factor < 0: spacing_factor = 0
     elif spacing_factor > 100: spacing_factor = 100
