@@ -1,5 +1,8 @@
 import requests
 import base64
+import logging
+
+logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.DEBUG)
 
 def upload_to_imgbb(path):
     with open(path, "rb") as file:
@@ -11,5 +14,5 @@ def upload_to_imgbb(path):
         }
         res = requests.post(url, payload)
         uploaded_url = res.json()['data']['url']
-        print("UPLOADED: to imgbb |", uploaded_url)
+        logging.info(f"uploaded to imgbb | {uploaded_url}")
         return uploaded_url

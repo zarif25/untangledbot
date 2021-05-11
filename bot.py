@@ -1,11 +1,14 @@
 import os
 import time
 import textwrap
+import logging
 from scrapper import Provider
 from image_manip import create_template
 from imgbb import upload_to_imgbb
 from fb import post_to_fb
 from news_hash import update_hash, get_prev_hash, url_to_hash
+
+logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.DEBUG)
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_stories()
@@ -14,9 +17,9 @@ while True:
 
     # hashing
     latest_hash = url_to_hash(stories[0].url)
-    print('LATEST HASH:', latest_hash)
+    logging.info(f'latest hash: {latest_hash}')
     previous_hash = get_prev_hash()
-    print('PREVIOUS HASH:', previous_hash)
+    logging.info(f'previous hash: {previous_hash}')
 
     for story in stories:
         current_hash = url_to_hash(story.url)
@@ -24,7 +27,7 @@ while True:
             break
         title, description, src, date, img = story.get_all()
         if None in [title, description, src, date, img]:
-            print(f"Error: problem in one of the parameters of this story: {story.url}")
+            logging.info(f"problem in one of the parameters of this story: {story.url}")
             continue
         title_wraped = textwrap.wrap(title, width=38)
         description_wraped = textwrap.wrap(description, width=48)
@@ -48,7 +51,7 @@ while True:
         os.remove(img_path)
 
     update_hash(latest_hash)
-    print("done")
+    logging.info("done")
     for i in range(6):
-        print(f"next update in {30-i*5}min")
+        logging.info(f"next update in {30-i*5}min")
         time.sleep(300)

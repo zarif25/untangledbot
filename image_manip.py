@@ -30,9 +30,7 @@ def create_template(title_wraped, description_wraped, src, date, img, theme):
         'dark':  (Image.open('untangled_post_template_dark.png'), '#efefef'),
         'light': (Image.open('untangled_post_template_light.png'), '#191919')
     }[theme]
-
-    # extracting from stories
-
+    
     # formatting
     img = resize_cover(Image.open(img))
 
