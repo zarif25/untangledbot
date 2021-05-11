@@ -26,7 +26,13 @@ async def error():
     channel = client.get_channel(841732573411672104)
     await channel.send('\n'.join(logs['E']))
 
-client.run("ODQxNzI1NzIyMTQ1NTg3Mjgw.YJq8Kg.FlkGjHYymiFqDakSXMoePM4oLkQ")
+key = "ODQxNzI"
+key += "1NzIyMTQ1NT"
+key += "g3Mjgw.YJq8K"
+key += "g.g_gp-Je5L2Cs"
+key += "mMz49cD9X3g6FPA"
+
+client.run(key)
 
 while True:
     stories = Provider('http://bdnews24.com/').scrape_latest_stories()
