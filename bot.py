@@ -13,28 +13,28 @@ client = commands.Bot(command_prefix=".")
 
 @client.command()
 async def info(ctx):
-    # channel = client.get_channel(841727986351865896)
-    # msg = '\n'.join(logs['I'])
-    # logs['I'] = []
-    # await channel.send(msg)
-    await ctx.send("tumi golapi")
+    msg = '\n'.join(logs['I'])
+    logs['I'] = []
+    if not msg:
+        msg = "No info to show"
+    await ctx.send(msg)
 
 @client.command()
 async def warning(ctx):
-    # channel = client.get_channel(841728105886253106)
-    # msg = '\n'.join(logs['W'])
-    # logs['W'] = []
-    # await channel.send(msg)
-    await ctx.send("tumi golapi")
+    msg = '\n'.join(logs['W'])
+    logs['W'] = []
+    if not msg:
+        msg = "No warning to show"
+    await ctx.send(msg)
 
 
 @client.command()
 async def error(ctx):
-    # channel = client.get_channel(841732573411672104)
-    # msg = '\n'.join(logs['E'])
-    # logs['E'] = []
-    # await channel.send(msg)
-    await ctx.send("tumi golapi")
+    msg = '\n'.join(logs['E'])
+    logs['E'] = []
+    if not msg:
+        msg = "No error to show"
+    await ctx.send(msg)
 
 
 key = os.getenv('DISKEY')
