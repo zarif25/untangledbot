@@ -64,6 +64,8 @@ class Story():
                 src = "Dhaka Tribune"
             elif src in ["Salma Nasreen"]:
                 src += ", Dhaka Tribune"
+            elif src == None:
+                raise Exception(f"Unknown source {src}")
             elif not src.endswith(("bdnews24.com", "UNB", "Reuters", "Washington Post", "New York Times")):
                 raise Exception(f"Unknown source {src}")
             return src
