@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 
 class Story():
     def __init__(self, url, netloc):
-        print(f"Initializing Story: {url}")
+        print(f"INITIALIZING STORY: {url}")
         self.url = url
         self.netloc = netloc
         self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
@@ -21,18 +21,18 @@ class Story():
             if self.netloc == 'bdnews24.com':
                 return self.soup.find(id='news-details-page').h1.text
             else:
-                raise Exception(f"ERROR you never taught me how to scrape {self.url} :(")
+                raise Exception(f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            print(f"ERROR something seems wrong with the title in {self.url} |", e)
+            print(f"ERROR: something seems wrong with the title in this story |", e)
 
     def get_description(self):
         try:
             if self.netloc == 'bdnews24.com':
                 return self.soup.find(class_='article_lead_text').h5.text
             else:
-                raise Exception(f"ERROR you never taught me how to scrape {self.url} :(")
+                raise Exception(f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            print(f"ERROR something seems wrong with the description in {self.url} |", e)
+            print(f"ERROR: something seems wrong with the description in this story |", e)
 
     def get_src(self):
         try:
@@ -48,9 +48,9 @@ class Story():
                     src = 'bdnews24.com'
                 return src
             else:
-                raise Exception(f"ERROR you never taught me how to scrape {self.url} :(")
+                raise Exception(f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            print(f"ERROR something seems wrong with the source in {self.url} |", e)
+            print(f"ERROR: something seems wrong with the source in this story |", e)
 
     def get_date(self):
         try:
@@ -65,9 +65,9 @@ class Story():
                     '%d %b %Y'
                 ).strftime("%A, %b %d, %Y")
             else:
-                raise Exception(f"ERROR you never taught me how to scrape {self.url} :(")
+                raise Exception(f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            print(f"ERROR something seems wrong with the date in {self.url} |", e)
+            print(f"ERROR: something seems wrong with the date in this story |", e)
 
     def get_img(self):
         try:
@@ -80,9 +80,9 @@ class Story():
                     stream=True
                 ).raw
             else:
-                raise Exception(f"ERROR you never taught me how to scrape {self.url} :(")
+                raise Exception(f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            print(f"ERROR something seems wrong with the image in {self.url} |", e)
+            print(f"ERROR: something seems wrong with the image in this story |", e)
 
     def get_all(self):
         return (
@@ -96,9 +96,8 @@ class Story():
 
 class Provider():
     def __init__(self, url):
-        print(f"Initializing Provider: {url}")
-        self.url = url
         self.netloc = urlparse(url).netloc
+        print(f"INITIALIZING PROVIDER: {self.netloc}")
         self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
 
     def scrape_stories(self):
@@ -108,7 +107,7 @@ class Provider():
                 urls = [a_tag['href'] for a_tag in a_tags]
                 return [Story(url, self.netloc) for url in urls if not url.startswith('https://opinion')]
             else:
-                raise Exception(f"ERROR you never taught me how to scrape {self.url} :(")
+                raise Exception(f"ERROR: you never taught me how to scrape this provider :(")
         except Exception as e:
-            print(f"ERROR something seems wrong with the recent stories in {self.url} |", e)
+            print(f"ERROR: something seems wrong with the recent stories in this provider |", e)
         return []

@@ -14,9 +14,9 @@ while True:
 
     # hashing
     latest_hash = url_to_hash(stories[0].url)
-    print('latest_hash:', latest_hash)
+    print('LATEST HASH:', latest_hash)
     previous_hash = get_prev_hash()
-    print('previous_hash: ', previous_hash)
+    print('PREVIOUS HASH:', previous_hash)
 
     for story in stories:
         current_hash = url_to_hash(story.url)
@@ -44,7 +44,6 @@ while True:
         img_path = 'posts\\' + current_hash + '.PNG'
         post.save(img_path)
         imgbb_url = upload_to_imgbb(img_path)
-        print(imgbb_url)
         post_to_fb(imgbb_url, description)
         os.remove(img_path)
 

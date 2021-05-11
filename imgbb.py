@@ -9,4 +9,6 @@ def upload_to_imgbb(path):
             "image": base64.b64encode(file.read()),
         }
         res = requests.post(url, payload)
-        return res.json()['data']['url']
+        uploaded_url = res.json()['data']['url']
+        print("UPLOADED: to imgbb |", uploaded_url)
+        return uploaded_url

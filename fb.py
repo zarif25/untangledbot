@@ -11,4 +11,4 @@ def post_to_fb(img_url, description):
     }
 
     r = requests.post(f'https://graph.facebook.com/{page_id}/photos', data=img_payload)
-    print(r.text)
+    print("UPLOADED: to fb |", r.text)
