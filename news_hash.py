@@ -1,6 +1,6 @@
 previous_hashes = {
-    'bdnews24.com': "bangladesh-logs-1140-new-virus-cases-death-toll-rises-by-40-in-a-day",
-    'www.dhakatribune.com': "barca-title-hopes-hanging-by-a-thread-after-levante-draw"
+    'bdnews24.com': "vegas-style-weddings-land-in-brooklyn",
+    'www.dhakatribune.com': "eid-holiday-rush-leads-to-12km-tailback-on-dhaka-aricha-highway"
 }
 
 def url_to_hash(url):
