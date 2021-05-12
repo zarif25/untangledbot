@@ -3,13 +3,8 @@ from logger import log_error, log_warning, log_info
 from bs4 import BeautifulSoup
 from datetime import date, datetime
 from urllib.parse import urlparse
-from news_hash import url_to_hash
+from news_hash import url_to_hash, previous_hashes
 
-
-previous_hashes = {
-    'bdnews24.com': "",
-    'www.dhakatribune.com': ""
-}
 
 class Story():
     def __init__(self, url, netloc):
@@ -44,9 +39,11 @@ class Story():
         description = None
         try:
             if self.netloc == 'bdnews24.com':
-                description = self.soup.find(class_='article_lead_text').h5.text
+                description = self.soup.find(
+                    class_='article_lead_text').h5.text
             elif self.netloc == 'www.dhakatribune.com':
-                description = self.soup.find(class_="highlighted-content").p.text
+                description = self.soup.find(
+                    class_="highlighted-content").p.text
         except Exception as e:
             log_error("problem in description", e)
         return description
@@ -66,10 +63,12 @@ class Story():
                 src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
             elif self.netloc == 'www.dhakatribune.com':
                 src = self.soup.a.text.strip(" \n")
-            
-            if src in ["Tribune Desk", "Showtime Desk", "Tribune Report"]:
+
+            if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
                 src = "Dhaka Tribune"
-            elif src in ["Salma Nasreen", "Bilkis Irani", "Manoj Kumar Saha, Gopalganj"]:
+            elif src in ["Salma Nasreen", "Bilkis Irani", "Manoj Kumar Saha, Gopalganj",
+                         "Abdullah Al Numan, Tangail", "Raihanul Islam Akand, Gazipur",
+                         "Shamima Rita, Narayanganj"]:
                 src += ", Dhaka Tribune"
         except Exception as e:
             log_error("problem in source", e)
@@ -105,7 +104,9 @@ class Story():
                     class_='gallery-image-box print-only').div.img['src']
             elif self.netloc == 'www.dhakatribune.com':
                 img = self.soup.find(class_="reports-big-img").img['src']
-            return requests.get(img,stream=True).raw
+                if img.endswith(".gif"):
+                    img = self.soup.find(id="gallery-grid").img['src']
+            return requests.get(img, stream=True).raw
         except Exception as e:
             log_warning("problem in image", e)
 
@@ -135,7 +136,8 @@ class Provider():
         stories = []
         try:
             if self.netloc == 'bdnews24.com':
-                a_tags = self.soup.find(id='homepagetabs-tabs-2-2').find_all('a')
+                a_tags = self.soup.find(
+                    id='homepagetabs-tabs-2-2').find_all('a')
                 urls = [a_tag['href'] for a_tag in a_tags]
                 latest_hash = url_to_hash(urls[0])
                 log_info('latest hash in bdnews24', latest_hash)
@@ -149,7 +151,8 @@ class Provider():
                 previous_hashes[self.netloc] = latest_hash
             elif self.netloc == 'www.dhakatribune.com':
                 h2_tags = self.soup.find(class_='just_in_news').find_all("h2")
-                urls = ["https://www.dhakatribune.com"+h2_tag.a['href'] for h2_tag in h2_tags]
+                urls = ["https://www.dhakatribune.com"+h2_tag.a['href']
+                        for h2_tag in h2_tags]
                 latest_hash = url_to_hash(urls[0])
                 log_info('latest hash in dhktribune', latest_hash)
                 previous_hash = previous_hashes[self.netloc]
@@ -160,7 +163,8 @@ class Provider():
                     stories.append(Story(url, self.netloc))
                 previous_hashes[self.netloc] = latest_hash
             else:
-                raise Exception("you never taught me how to scrape this provider :(")
+                raise Exception(
+                    "you never taught me how to scrape this provider :(")
         except Exception as e:
             log_error("problem in recent stories", e)
         return stories  # TODO: what happens when this is returned?

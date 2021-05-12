@@ -1,11 +1,11 @@
 import os
 import time
-from logger import log_warning, log_info
+from logger import log_error, log_warning, log_info
 from scrapper import Provider
 from image_manip import create_template
 from imgbb import upload_to_imgbb
 from fb import post_to_fb
-from news_hash import url_to_hash
+from news_hash import url_to_hash, previous_hashes
 from utils import get_theme
 
 
@@ -17,9 +17,10 @@ while True:
     for story in stories:
         story.scrape()
         title, description, src, date, img, src_url = story.get_all()
-        post = create_template(title, description, src, date, img, theme)
-        if post == None:
-            log_warning("problem in one of the parameters of this story", story.url)
+        try:
+            post = create_template(title, description, src, date, img, theme)
+        except Exception as e:
+            log_warning("problem creating post", e)
             continue
         img_path = f'posts\\{url_to_hash(story.url)}.PNG'
         post.save(img_path)
@@ -27,9 +28,13 @@ while True:
         if src_url != None:
             description += f"\nSource: {src_url}"
         post_to_fb(imgbb_url, description)
-        os.remove(img_path)
+        try:
+            os.remove(img_path)
+        except Exception as e:
+            log_error("problem deleting file", e)
 
     log_info("done", sep="")
     for i in range(6):
         log_info("NEXT UPDATE", f"after {30-i*5}min")
+        log_info("previous hashes", previous_hashes)
         time.sleep(300)
