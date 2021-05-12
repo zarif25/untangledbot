@@ -34,7 +34,7 @@ while True:
             log_error("problem deleting file", e)
 
     log_info("done", sep="")
-    for i in range(6):
-        log_info("NEXT UPDATE", f"after {30-i*5}min")
+    for i in range(4):
+        log_info("NEXT UPDATE", f"after {20-i*5}min")
         log_info("previous hashes", previous_hashes)
         time.sleep(300)

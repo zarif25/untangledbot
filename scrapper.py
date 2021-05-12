@@ -63,13 +63,12 @@ class Story():
                 src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
             elif self.netloc == 'www.dhakatribune.com':
                 src = self.soup.a.text.strip(" \n")
+                outside_src = ['afp', 'bss', 'reuters', 'unb', 'new york times', 'washington']
 
-            if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
-                src = "Dhaka Tribune"
-            elif src in ["Salma Nasreen", "Bilkis Irani", "Manoj Kumar Saha, Gopalganj",
-                         "Abdullah Al Numan, Tangail", "Raihanul Islam Akand, Gazipur",
-                         "Shamima Rita, Narayanganj"]:
-                src += ", Dhaka Tribune"
+                if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
+                    src = "Dhaka Tribune"
+                elif not any([o_s in src.lower() for o_s in outside_src]):
+                    src += ", Dhaka Tribune"
         except Exception as e:
             log_error("problem in source", e)
         return src

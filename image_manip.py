@@ -29,9 +29,9 @@ def resize_cover(img, is_content_short):
 
 
 def create_template(title, description, src, date, img, theme):
-
     verify(title, description, src, date, img, theme)
 
+    # set is_text_only
     is_text_only = img == None
 
     # formatting
@@ -43,10 +43,10 @@ def create_template(title, description, src, date, img, theme):
     spacing_factor = get_spacing_factor(
         title_wrapped, description_wrapped, is_text_only)
 
-    print(spacing_factor)  # TODO: remove this
-
+    # set is_content_short
     is_content_short = spacing_factor > 250 and not is_text_only
 
+    # re-wrap description with new font-size
     if is_content_short:
         description = ' '.join(description_wrapped)
         description_wrapped = textwrap.wrap(description, width=45)
@@ -143,6 +143,7 @@ def put_date(date, spacing_factor, fg_color, draw, height_for_next_element):
 
 
 def verify(title, description, src, date, img, theme):
+    """throws exception if arguments are invalid"""
     if None in [title, description, src, date] or theme not in ['light', 'dark']:
         raise Exception("Invalid arguements")
 

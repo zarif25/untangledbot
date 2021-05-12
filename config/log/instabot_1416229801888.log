@@ -1,0 +1,41 @@
+2021-05-12 20:48:35,846 - instabot version: 0.117.0 (bot) - INFO - Instabot version: 0.117.0 Started
+2021-05-12 20:48:35,853 - instabot version: 0.117.0 (bot) - DEBUG - Bot imported from C:\Users\zarif\AppData\Local\Programs\Python\Python39\lib\site-packages\instabot\bot\bot.py
+2021-05-12 20:48:35,854 - instabot version: 0.117.0 (api_login) - INFO - Not yet logged in starting: PRE-LOGIN FLOW!
+2021-05-12 20:48:36,406 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: accounts/get_prefill_candidates/ returned response: <Response [200]>
+2021-05-12 20:48:36,815 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: qe/sync/ returned response: <Response [200]>
+2021-05-12 20:48:37,256 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: launcher/sync/ returned response: <Response [200]>
+2021-05-12 20:48:37,695 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: accounts/contact_point_prefill/ returned response: <Response [200]>
+2021-05-12 20:48:39,549 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: accounts/login/ returned response: <Response [200]>
+2021-05-12 20:48:39,550 - instabot version: 0.117.0 (api) - INFO - Logged-in successfully as 'news.untangled'!
+2021-05-12 20:48:39,557 - instabot version: 0.117.0 (api_login) - INFO - LOGIN FLOW! Just logged-in: True
+2021-05-12 20:48:40,283 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: qe/sync/ returned response: <Response [200]>
+2021-05-12 20:48:40,740 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: launcher/sync/ returned response: <Response [200]>
+2021-05-12 20:48:41,171 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: zr/token/result/?device_id=android-b24824ab1e44d9fb&token_hash=&custom_device_id=android-b24824ab1e44d9fb&fetch_reason=token_expired returned response: <Response [200]>
+2021-05-12 20:48:41,592 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: multiple_accounts/get_account_family/ returned response: <Response [200]>
+2021-05-12 20:48:42,006 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: qe/sync/ returned response: <Response [200]>
+2021-05-12 20:48:42,965 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: igtv/browse_feed/?prefetch=1 returned response: <Response [200]>
+2021-05-12 20:48:43,420 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: creatives/ar_class/ returned response: <Response [200]>
+2021-05-12 20:48:44,179 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: feed/reels_tray/ returned response: <Response [200]>
+2021-05-12 20:48:50,804 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: feed/timeline/ returned response: <Response [200]>
+2021-05-12 20:48:51,202 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: media/blocked/ returned response: <Response [200]>
+2021-05-12 20:48:51,904 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: news/inbox/ returned response: <Response [200]>
+2021-05-12 20:48:52,332 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: loom/fetch_config/ returned response: <Response [200]>
+2021-05-12 20:48:53,011 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: scores/bootstrap/users/?surfaces=["autocomplete_user_list","coefficient_besties_list_ranking","coefficient_rank_recipient_user_suggestion","coefficient_ios_section_test_bootstrap_ranking","coefficient_direct_recipients_ranking_variant_2"] returned response: <Response [200]>
+2021-05-12 20:48:53,431 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: business/eligibility/get_monetization_products_eligibility_data/?product_types=branded_content returned response: <Response [200]>
+2021-05-12 20:48:53,810 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: business/branded_content/should_require_professional_account/ returned response: <Response [200]>
+2021-05-12 20:48:54,212 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: linked_accounts/get_linkage_status/ returned response: <Response [200]>
+2021-05-12 20:48:54,612 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: locations/request_country/ returned response: <Response [200]>
+2021-05-12 20:48:55,011 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: qp/get_cooldowns/?signed_body=signed_body=4b9c516a5410a3bc128e09c6104a7f042146b9c2023870560c63a43a7f66781c.4&ig_sig_key_version=4&ig_sig_key_version=4 returned response: <Response [200]>
+2021-05-12 20:48:55,412 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: users/arlink_download_info/?version_override=2.2.1 returned response: <Response [200]>
+2021-05-12 20:48:56,130 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: users/47824965685/info/ returned response: <Response [200]>
+2021-05-12 20:48:56,579 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: direct_v2/get_presence/ returned response: <Response [200]>
+2021-05-12 20:48:57,067 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: direct_v2/inbox/?visual_message_return_type=unseen&thread_message_limit=10&persistentBadging=true&limit=20 returned response: <Response [200]>
+2021-05-12 20:48:57,493 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: direct_v2/inbox/?visual_message_return_type=unseen&persistentBadging=true&limit=0 returned response: <Response [200]>
+2021-05-12 20:48:59,685 - instabot version: 0.117.0 (api) - DEBUG - GET to endpoint: discover/topical_explore/?is_prefetch=true&omit_cover_media=true&use_sectional_payload=true&timezone_offset=0&session_id=b9c11984-170c-438f-8bae-4c2b9ddf4a2f&include_fixed_destinations=true returned response: <Response [200]>
+2021-05-12 20:49:00,191 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: notifications/badge/ returned response: <Response [200]>
+2021-05-12 20:49:00,806 - instabot version: 0.117.0 (api) - DEBUG - POST to endpoint: qp/batch_fetch/ returned response: <Response [200]>
+2021-05-12 20:49:00,812 - instabot version: 0.117.0 (bot_checkpoint) - DEBUG - Loading Checkpoint file from: C:\Users\zarif\Documents\Dev\untangle - Copy/config/news.untangled.checkpoint
+2021-05-12 20:49:03,213 - instabot version: 0.117.0 (api_photo) - ERROR - Photo Upload failed with the following response: <Response [400]>
+2021-05-12 20:49:03,224 - instabot version: 0.117.0 (bot_photo) - INFO - Photo 'post_template_content_short_light.png' is not uploaded.
+2021-05-12 20:49:03,227 - instabot version: 0.117.0 (bot_checkpoint) - DEBUG - Saving Checkpoint file to: C:\Users\zarif\Documents\Dev\untangle - Copy/config/news.untangled.checkpoint
+2021-05-12 20:49:03,228 - instabot version: 0.117.0 (bot) - INFO - Total requests: 31
