@@ -1,1 +1,8 @@
-test.*
+__pycache__
+config
+
+# testing
+
+graphics
+token.txt
+test.png
