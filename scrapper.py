@@ -3,7 +3,7 @@ from logger import log_error, log_warning, log_info
 from bs4 import BeautifulSoup
 from datetime import date, datetime
 from urllib.parse import urlparse
-from news_hash import url_to_hash, previous_hashes
+from news_hash import previous_hashes
 
 
 class Story():
@@ -140,9 +140,11 @@ class Provider():
 
     def get_latest_stories(self):
         """returns list of latest stories"""
-        latest_urls = self.__get_latest_urls(self.__scrape_story_urls())
-        self.__update_prev_hash(latest_urls)
-        return self.__urls_to_stories(latest_urls)
+        urls = self.__scrape_story_urls()
+        stories = self.__urls_to_stories(urls)
+        latest_stories = self.__get_latest_stories(stories)
+        self.__update_prev_hash(latest_stories)
+        return latest_stories
 
     def __scrape_story_urls(self):
         """returns urls to all stories in the recent section of the provider in ascending order of time"""
@@ -163,36 +165,30 @@ class Provider():
             log_error("problem in recent stories", e)
         return urls
 
-    def __get_latest_hash(self, urls):
-        """return the hash of first url if urls is not empty else none"""
-        if urls:
-            latest_hash = url_to_hash(urls[0])
-            log_info('latest hash in bdnews24', latest_hash)
-            return latest_hash
-        return None
-
-    def __get_prev_hash(self):
-        """returns previous hash"""
-        previous_hash = previous_hashes[self.__netloc]
-        log_info('previous hash in bdnews24', previous_hash)
-        return previous_hash
-
-    def __update_prev_hash(self, urls):
-        """finds the hash of the url of the latest story and updates the previous hash"""
-        latest_hash = self.__get_latest_hash(urls)
-        if latest_hash:
-            previous_hashes[self.__netloc] = latest_hash
-
-    def __get_latest_urls(self, urls):
-        """trims the urls that are already uploaded"""
-        prev_hash = self.__get_prev_hash()
-        latest_urls = []
-        for url in urls:
-            if url_to_hash(url) == prev_hash:
-                break
-            latest_urls.append(url)
-        return latest_urls
-
     def __urls_to_stories(self, urls):
         """returns a list of stories from a list of urls"""
         return [Story(url, self.__netloc) for url in urls]
+
+    def __get_latest_hash(self, stories):
+        """return the hash of first story if stories is not empty else none"""
+        return stories[0].hash if stories else None
+
+    def __get_prev_hash(self):
+        """returns previous hash"""
+        return previous_hashes[self.__netloc]
+
+    def __update_prev_hash(self, stories):
+        """finds the hash of the latest story and updates the previous hash"""
+        latest_hash = self.__get_latest_hash(stories)
+        if latest_hash:
+            previous_hashes[self.__netloc] = latest_hash
+
+    def __get_latest_stories(self, stories):
+        """trims the stories that are already uploaded"""
+        prev_hash = self.__get_prev_hash()
+        latest_stories = []
+        for story in stories:
+            if story.hash == prev_hash:
+                break
+            latest_stories.append(story)
+        return latest_stories
