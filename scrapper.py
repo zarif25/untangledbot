@@ -3,7 +3,6 @@ from logger import log_error, log_warning, log_info
 from bs4 import BeautifulSoup
 from datetime import date, datetime
 from urllib.parse import urlparse
-from news_hash import previous_hashes
 
 
 class Story():
@@ -133,6 +132,12 @@ class Story():
 
 
 class Provider():
+
+    prev_hashes = {
+        'bdnews24.com': '',
+        'www.dhakatribune.com': 'bangladeshi-origin-footballer-hamza-shows-solidarity-with-palestine-after-winning-fa-cup'
+    }
+
     def __init__(self, url):
         self.url = url
         self.__netloc = urlparse(url).netloc
@@ -169,19 +174,20 @@ class Provider():
         """returns a list of stories from a list of urls"""
         return [Story(url, self.__netloc) for url in urls]
 
-    def __get_latest_hash(self, stories):
+    @staticmethod
+    def __get_latest_hash(stories):
         """return the hash of first story if stories is not empty else none"""
         return stories[0].hash if stories else None
 
     def __get_prev_hash(self):
         """returns previous hash"""
-        return previous_hashes[self.__netloc]
+        return Provider.prev_hashes[self.__netloc]
 
     def __update_prev_hash(self, stories):
         """finds the hash of the latest story and updates the previous hash"""
         latest_hash = self.__get_latest_hash(stories)
         if latest_hash:
-            previous_hashes[self.__netloc] = latest_hash
+            Provider.prev_hashes[self.__netloc] = latest_hash
 
     def __get_latest_stories(self, stories):
         """trims the stories that are already uploaded"""

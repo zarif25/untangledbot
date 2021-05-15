@@ -5,7 +5,6 @@ from scrapper import Provider
 from image_manip import create_template
 from imgbb import upload_to_imgbb
 from fb import post_to_fb
-from news_hash import previous_hashes
 from utils import get_theme
 
 provider1 = Provider('http://bdnews24.com/')
@@ -25,17 +24,17 @@ while True:
             continue
         img_path = f'posts\\{story.hash}.PNG'
         post.save(img_path)
-        imgbb_url = upload_to_imgbb(img_path)
-        if src_url != None:
-            description += f"\nSource: {src_url}"
-        post_to_fb(imgbb_url, description)
-        try:
-            os.remove(img_path)
-        except Exception as e:
-            log_error("problem deleting file", e)
+        # imgbb_url = upload_to_imgbb(img_path)
+        # if src_url != None:
+        #     description += f"\nSource: {src_url}"
+        # post_to_fb(imgbb_url, description)
+        # try:
+        #     os.remove(img_path)
+        # except Exception as e:
+        #     log_error("problem deleting file", e)
 
     log_info("done", sep="")
+    log_info("previous hashes", Provider.prev_hashes)
     for i in range(4):
         log_info("NEXT UPDATE", f"after {20-i*5}min")
-        log_info("previous hashes", previous_hashes)
         time.sleep(300)
