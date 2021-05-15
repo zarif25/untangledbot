@@ -75,44 +75,43 @@ class Story():
         return src
 
     def __get_date(self):
+        date = None
         try:
             if self.netloc == 'bdnews24.com':
-                return datetime.strptime(
-                    self.soup
-                    .find(class_='dateline')
-                    .find_all('span')[1]
-                    .text
-                    .split(':')[0][:-2]
-                    .strip(),
-                    '%d %b %Y'
-                ).strftime("%A, %b %d, %Y")
+                date_str = self.soup.find(class_='dateline').find_all('span')[
+                    1].text.split(':')[0][:-2].strip()
+                date_format = '%d %b %Y'
             elif self.netloc == 'www.dhakatribune.com':
                 date_str = self.soup.ul.li.text.strip('\n')[23:].split(',')
                 date_str[0] = date_str[0][:-2]
                 date_str = ''.join(date_str)
-                return datetime.strptime(
-                    date_str,
-                    "%B %d %Y"
-                ).strftime("%A, %b %d, %Y")
+                date_format = '%B %d %Y'
+            date = datetime.strptime(
+                date_str, date_format).strftime("%A, %b %d, %Y")
         except Exception as e:
             log_error("problem in date", e)
+        return date
 
     def __get_img(self):
+        img = None
         try:
             if self.netloc == 'bdnews24.com':
-                img = self.soup.find(
+                img_url = self.soup.find(
                     class_='gallery-image-box print-only').div.img['src']
             elif self.netloc == 'www.dhakatribune.com':
-                img = self.soup.find(class_="reports-big-img").img['src']
-                if img.endswith(".gif"):
-                    img = self.soup.find(id="gallery-grid").img['src']
-            return requests.get(img, stream=True).raw
+                img_url = self.soup.find(class_="reports-big-img").img['src']
+                if img_url.endswith(".gif"):
+                    img_url = self.soup.find(id="gallery-grid").img['src']
+            img = requests.get(img_url, stream=True).raw
         except Exception as e:
             log_warning("problem in image", e)
+        return img
 
     def __get_src_link(self):
+        src_link = None
         if self.src != None and self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
-            return self.url
+            src_link = self.url
+        return src_link
 
     def get_all(self):
         return (
