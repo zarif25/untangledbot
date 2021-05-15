@@ -4,11 +4,11 @@ from PIL import Image, ImageFont, ImageDraw
 
 
 class Font:
-    black = ImageFont.truetype("GilroyBlack.ttf", 45)
-    bold = ImageFont.truetype("GilroyBold.ttf", 95)
-    medium = ImageFont.truetype("GilroyMedium.ttf", 44)
-    medium_large = ImageFont.truetype("GilroyMedium.ttf", 50)
-    regular = ImageFont.truetype("GilroyRegular.ttf", 40)
+    black = ImageFont.truetype("00_GilroyBlack.ttf", 45)
+    bold = ImageFont.truetype("00_GilroyBold.ttf", 95)
+    medium = ImageFont.truetype("00_GilroyMedium.ttf", 44)
+    medium_large = ImageFont.truetype("00_GilroyMedium.ttf", 50)
+    regular = ImageFont.truetype("00_GilroyRegular.ttf", 40)
 
 
 def resize_cover(img, is_content_short):
@@ -163,17 +163,17 @@ def get_fg_color(theme):
 def get_template(is_content_short, is_text_only, theme):
     if is_text_only:
         return {
-            'dark':  Image.open('post_template_text_only_dark.png'),
-            'light': Image.open('post_template_text_only_light.png')
+            'dark':  Image.open('00_template_text_only_dark.png'),
+            'light': Image.open('00_template_text_only_light.png')
         }[theme]
     if is_content_short:
         return {
-            'dark':  Image.open('post_template_content_short_dark.png'),
-            'light': Image.open('post_template_content_short_light.png')
+            'dark':  Image.open('00_template_content_short_dark.png'),
+            'light': Image.open('00_template_content_short_light.png')
         }[theme]
     return {
-        'dark':  Image.open('post_template_dark.png'),
-        'light': Image.open('post_template_light.png')
+        'dark':  Image.open('00_template_dark.png'),
+        'light': Image.open('00_template_light.png')
     }[theme]
 
 
