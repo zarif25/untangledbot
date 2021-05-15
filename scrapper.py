@@ -147,9 +147,11 @@ class Provider():
                 urls = [a_tag['href'] for a_tag in a_tags]
             elif self.__netloc == 'www.dhakatribune.com':
                 h2_tags = soup.find(class_='just_in_news').find_all("h2")
-                urls = ["https://www.dhakatribune.com"+h2_tag.a['href'] for h2_tag in h2_tags]
+                urls = ["https://www.dhakatribune.com"+h2_tag.a['href']
+                        for h2_tag in h2_tags]
             else:
-                raise Exception("you never taught me how to scrape this provider :(")
+                raise Exception(
+                    "you never taught me how to scrape this provider :(")
         except Exception as e:
             log_error("problem in recent stories", e)
         return urls
@@ -183,7 +185,7 @@ class Provider():
                 break
             latest_urls.append(url)
         return latest_urls
-    
+
     def __urls_to_stories(self, urls):
         """returns a list of stories from a list of urls"""
         return [Story(url, self.__netloc) for url in urls]
