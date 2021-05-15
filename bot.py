@@ -8,10 +8,11 @@ from fb import post_to_fb
 from news_hash import url_to_hash, previous_hashes
 from utils import get_theme
 
+provider1 = Provider('http://bdnews24.com/')
+provider2 = Provider('https://www.dhakatribune.com/')
 
 while True:
-    stories = Provider('http://bdnews24.com/').get_latest_stories()
-    stories += Provider('https://www.dhakatribune.com/').get_latest_stories()
+    stories = provider1.get_latest_stories() + provider2.get_latest_stories()
     theme = get_theme()
 
     for story in stories:
