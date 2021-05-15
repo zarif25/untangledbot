@@ -11,12 +11,20 @@ class Story():
         log_info("INITIALIZING STORY", url)
         self.url = url
         self.netloc = netloc
-        self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
-        if self.netloc == 'www.dhakatribune.com':
-            self.soup = self.soup.find(class_="report-mainhead")
+        self.hash = self.__get_hash(url)
+
+    def __get_hash(self, url):
+        if self.netloc in ['bdnews24.com', 'www.dhakatribune.com']:
+            return urlparse(url).path.split('/')[-1]
+        else:
+            # TODO: hash stories from other providers
+            pass
 
     def scrape(self):
         log_info("SCRAPING", self.url)
+        self.soup = BeautifulSoup(requests.get(self.url).text, 'lxml')
+        if self.netloc == 'www.dhakatribune.com':
+            self.soup = self.soup.find(class_="report-mainhead")
         self.title = self.__get_title()
         self.description = self.__get_description()
         self.src = self.__get_src()
