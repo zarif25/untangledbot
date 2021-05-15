@@ -10,8 +10,8 @@ from utils import get_theme
 
 
 while True:
-    stories = Provider('http://bdnews24.com/').scrape_latest_stories()
-    stories += Provider('https://www.dhakatribune.com/').scrape_latest_stories()
+    stories = Provider('http://bdnews24.com/').get_latest_stories()
+    stories += Provider('https://www.dhakatribune.com/').get_latest_stories()
     theme = get_theme()
 
     for story in stories:

@@ -63,7 +63,8 @@ class Story():
                 src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
             elif self.netloc == 'www.dhakatribune.com':
                 src = self.soup.a.text.strip(" \n")
-                outside_src = ['afp', 'bss', 'reuters', 'unb', 'new york times', 'washington']
+                outside_src = ['afp', 'bss', 'reuters',
+                               'unb', 'new york times', 'washington']
 
                 if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
                     src = "Dhaka Tribune"
@@ -126,44 +127,63 @@ class Story():
 
 class Provider():
     def __init__(self, url):
-        self.netloc = urlparse(url).netloc
-        log_info("INITIALIZING PROVIDER", self.netloc)
-        self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
+        self.url = url
+        self.__netloc = urlparse(url).netloc
+        log_info("INITIALIZING PROVIDER", self.__netloc)
 
-    def scrape_latest_stories(self):
-        log_info("SCRAPING", self.netloc)
-        stories = []
+    def get_latest_stories(self):
+        """returns list of latest stories"""
+        latest_urls = self.__get_latest_urls(self.__scrape_story_urls())
+        self.__update_prev_hash(latest_urls)
+        return self.__urls_to_stories(latest_urls)
+
+    def __scrape_story_urls(self):
+        """returns urls to all stories in the recent section of the provider in ascending order of time"""
+        log_info("SCRAPING", self.__netloc)
+        soup = BeautifulSoup(requests.get(self.url).text, 'lxml')
         try:
-            if self.netloc == 'bdnews24.com':
-                a_tags = self.soup.find(
-                    id='homepagetabs-tabs-2-2').find_all('a')
+            if self.__netloc == 'bdnews24.com':
+                a_tags = soup.find(id='homepagetabs-tabs-2-2').find_all('a')
                 urls = [a_tag['href'] for a_tag in a_tags]
-                latest_hash = url_to_hash(urls[0])
-                log_info('latest hash in bdnews24', latest_hash)
-                previous_hash = previous_hashes[self.netloc]
-                log_info('previous hash in bdnews24', previous_hash)
-                for url in urls:
-                    if url_to_hash(url) == previous_hash:
-                        break
-                    if not url.startswith('https://opinion'):
-                        stories.append(Story(url, self.netloc))
-                previous_hashes[self.netloc] = latest_hash
-            elif self.netloc == 'www.dhakatribune.com':
-                h2_tags = self.soup.find(class_='just_in_news').find_all("h2")
-                urls = ["https://www.dhakatribune.com"+h2_tag.a['href']
-                        for h2_tag in h2_tags]
-                latest_hash = url_to_hash(urls[0])
-                log_info('latest hash in dhktribune', latest_hash)
-                previous_hash = previous_hashes[self.netloc]
-                log_info('previous hash in dhktribune', previous_hash)
-                for url in urls:
-                    if url_to_hash(url) == previous_hash:
-                        break
-                    stories.append(Story(url, self.netloc))
-                previous_hashes[self.netloc] = latest_hash
+            elif self.__netloc == 'www.dhakatribune.com':
+                h2_tags = soup.find(class_='just_in_news').find_all("h2")
+                urls = ["https://www.dhakatribune.com"+h2_tag.a['href'] for h2_tag in h2_tags]
             else:
-                raise Exception(
-                    "you never taught me how to scrape this provider :(")
+                raise Exception("you never taught me how to scrape this provider :(")
         except Exception as e:
             log_error("problem in recent stories", e)
-        return stories  # TODO: what happens when this is returned?
+        return urls
+
+    def __get_latest_hash(self, urls):
+        """return the hash of first url if urls is not empty else none"""
+        if urls:
+            latest_hash = url_to_hash(urls[0])
+            log_info('latest hash in bdnews24', latest_hash)
+            return latest_hash
+        return None
+
+    def __get_prev_hash(self):
+        """returns previous hash"""
+        previous_hash = previous_hashes[self.__netloc]
+        log_info('previous hash in bdnews24', previous_hash)
+        return previous_hash
+
+    def __update_prev_hash(self, urls):
+        """finds the hash of the url of the latest story and updates the previous hash"""
+        latest_hash = self.__get_latest_hash(urls)
+        if latest_hash:
+            previous_hashes[self.__netloc] = latest_hash
+
+    def __get_latest_urls(self, urls):
+        """trims the urls that are already uploaded"""
+        prev_hash = self.__get_prev_hash()
+        latest_urls = []
+        for url in urls:
+            if url_to_hash(url) == prev_hash:
+                break
+            latest_urls.append(url)
+        return latest_urls
+    
+    def __urls_to_stories(self, urls):
+        """returns a list of stories from a list of urls"""
+        return [Story(url, self.__netloc) for url in urls]
