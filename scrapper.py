@@ -5,6 +5,19 @@ from datetime import date, datetime
 from urllib.parse import urlparse
 
 
+def exception_handler(info_name):
+    def outer(func):
+        def inner(*args):
+            info = None
+            try:
+                info = func(*args)
+            except Exception as e:
+                log_error(f"problem in {info_name}", e)
+            return info
+        return inner
+    return outer
+
+
 class Story():
     def __init__(self, url, netloc):
         log_info("INITIALIZING STORY", url)
@@ -14,7 +27,11 @@ class Story():
 
     def __get_hash(self, url):
         if self.netloc in ['bdnews24.com', 'www.dhakatribune.com']:
-            return urlparse(url).path.split('/')[-1]
+            url_parts = urlparse(url).path.split('/')
+            hash = url_parts[-1]
+            if not hash:
+                hash = url_parts[-2]
+            return hash
         else:
             # TODO: hash stories from other providers
             pass
@@ -31,88 +48,66 @@ class Story():
         self.img = self.__get_img()
         self.src_link = self.__get_src_link()
 
+    @exception_handler('title')
     def __get_title(self):
-        title = None
-        try:
-            if self.netloc == 'bdnews24.com':
-                title = self.soup.find(id='news-details-page').h1.text
-            elif self.netloc == 'www.dhakatribune.com':
-                title = self.soup.h1.text
-        except Exception as e:
-            log_error("problem in title", e)
-        return title
+        if self.netloc == 'bdnews24.com':
+            return self.soup.find(id='news-details-page').h1.text
+        elif self.netloc == 'www.dhakatribune.com':
+            return self.soup.h1.text
 
+    @exception_handler('description')
     def __get_description(self):
-        description = None
-        try:
-            if self.netloc == 'bdnews24.com':
-                description = self.soup.find(
-                    class_='article_lead_text').h5.text
-            elif self.netloc == 'www.dhakatribune.com':
-                description = self.soup.find(
-                    class_="highlighted-content").p.text
-        except Exception as e:
-            log_error("problem in description", e)
-        return description
+        if self.netloc == 'bdnews24.com':
+            return self.soup.find(class_='article_lead_text').h5.text
+        elif self.netloc == 'www.dhakatribune.com':
+            return self.soup.find(class_="highlighted-content").p.text
 
+    @exception_handler('src')
     def __get_src(self):
-        src = None
-        try:
-            if self.netloc == 'bdnews24.com':
-                src = self.soup.find(class_='authorName')
-                if not (src and src.text):
-                    src = self.soup.find(id='article_notations').p.text
-                else:
-                    src = src.text
-                src = src.strip(' >\n')
-                if src == '':
-                    src = 'bdnews24.com'
-                src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
-            elif self.netloc == 'www.dhakatribune.com':
-                src = self.soup.a.text.strip(" \n")
-                outside_src = ['afp', 'bss', 'reuters',
-                               'unb', 'new york times', 'washington']
-
-                if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
-                    src = "Dhaka Tribune"
-                elif not any([o_s in src.lower() for o_s in outside_src]):
-                    src += ", Dhaka Tribune"
-        except Exception as e:
-            log_error("problem in source", e)
+        if self.netloc == 'bdnews24.com':
+            src = self.soup.find(class_='authorName')
+            if not (src and src.text):
+                src = self.soup.find(id='article_notations').p.text
+            else:
+                src = src.text
+            src = src.strip(' >\n')
+            if src == '':
+                src = 'bdnews24.com'
+            src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
+        elif self.netloc == 'www.dhakatribune.com':
+            src = self.soup.a.text.strip(" \n")
+            outside_src = ['afp', 'bss', 'reuters',
+                           'unb', 'new york times', 'washington']
+            if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
+                src = "Dhaka Tribune"
+            elif not any([o_s in src.lower() for o_s in outside_src]):
+                src += ", Dhaka Tribune"
         return src
 
+    @exception_handler('date')
     def __get_date(self):
-        date = None
-        try:
-            if self.netloc == 'bdnews24.com':
-                date_str = self.soup.find(class_='dateline').find_all('span')[
-                    1].text.split(':')[0][:-2].strip()
-                date_format = '%d %b %Y'
-            elif self.netloc == 'www.dhakatribune.com':
-                date_str = self.soup.ul.li.text.strip('\n')[23:].split(',')
-                date_str[0] = date_str[0][:-2]
-                date_str = ''.join(date_str)
-                date_format = '%B %d %Y'
-            date = datetime.strptime(
-                date_str, date_format).strftime("%A, %b %d, %Y")
-        except Exception as e:
-            log_error("problem in date", e)
-        return date
+        if self.netloc == 'bdnews24.com':
+            date_str = self.soup.find(class_='dateline').find_all('span')[
+                1].text.split(':')[0][:-2].strip()
+            date_format = '%d %b %Y'
+        elif self.netloc == 'www.dhakatribune.com':
+            date_str = self.soup.ul.li.text.strip('\n')[23:].split(',')
+            date_str[0] = date_str[0][:-2]
+            date_str = ''.join(date_str)
+            date_format = '%B %d %Y'
+        return datetime.strptime(
+            date_str, date_format).strftime("%A, %b %d, %Y")
 
+    @exception_handler('img')
     def __get_img(self):
-        img = None
-        try:
-            if self.netloc == 'bdnews24.com':
-                img_url = self.soup.find(
-                    class_='gallery-image-box print-only').div.img['src']
-            elif self.netloc == 'www.dhakatribune.com':
-                img_url = self.soup.find(class_="reports-big-img").img['src']
-                if img_url.endswith(".gif"):
-                    img_url = self.soup.find(id="gallery-grid").img['src']
-            img = requests.get(img_url, stream=True).raw
-        except Exception as e:
-            log_warning("problem in image", e)
-        return img
+        if self.netloc == 'bdnews24.com':
+            img_url = self.soup.find(
+                class_='gallery-image-box print-only').div.img['src']
+        elif self.netloc == 'www.dhakatribune.com':
+            img_url = self.soup.find(class_="reports-big-img").img['src']
+            if img_url.endswith(".gif"):
+                img_url = self.soup.find(id="gallery-grid").img['src']
+        return requests.get(img_url, stream=True).raw
 
     def __get_src_link(self):
         src_link = None
@@ -135,7 +130,7 @@ class Provider():
 
     prev_hashes = {
         'bdnews24.com': '',
-        'www.dhakatribune.com': 'bangladeshi-origin-footballer-hamza-shows-solidarity-with-palestine-after-winning-fa-cup'
+        'www.dhakatribune.com': ''
     }
 
     def __init__(self, url):
