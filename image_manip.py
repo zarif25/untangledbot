@@ -102,6 +102,8 @@ def put_title(title_wrapped, spacing_factor, fg_color, draw, height_for_next_ele
 
 
 def put_description(description_wrapped, is_content_short, fg_color, draw, height_for_next_element):
+    if description_wrapped[-1][-1] != '.':
+        description_wrapped[-1] += '.'
     if is_content_short:
         line_height = 70
         space_left = 150

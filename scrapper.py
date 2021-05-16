@@ -3,6 +3,7 @@ from logger import log_error, log_warning, log_info
 from bs4 import BeautifulSoup
 from datetime import date, datetime
 from urllib.parse import urlparse
+from outer_source import get_source_link
 
 
 def exception_handler(info_name):
@@ -109,10 +110,13 @@ class Story():
                 img_url = self.soup.find(id="gallery-grid").img['src']
         return requests.get(img_url, stream=True).raw
 
+    @exception_handler('source link')
     def __get_src_link(self):
         src_link = None
         if self.src != None and self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
             src_link = self.url
+        else:
+            src_link = get_source_link(self.src, self.title)
         return src_link
 
     def get_all(self):
@@ -128,10 +132,8 @@ class Story():
 
 class Provider():
 
-    prev_hashes = {
-        'bdnews24.com': '',
-        'www.dhakatribune.com': ''
-    }
+    prev_hashes = {'bdnews24.com': 'damon-weaver-child-reporter-who-interviewed-obama-dies-at-23',
+                   'www.dhakatribune.com': '5-sustain-burn-injuries-in-chittagong-blast'}
 
     def __init__(self, url):
         self.url = url

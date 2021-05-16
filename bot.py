@@ -17,6 +17,8 @@ while True:
     for story in stories:
         story.scrape()
         title, description, src, date, img, src_url = story.get_all()
+        if not src_url:
+            continue
         try:
             post = create_template(title, description, src, date, img, theme)
         except Exception as e:
@@ -24,14 +26,13 @@ while True:
             continue
         img_path = f'posts\\{story.hash}.PNG'
         post.save(img_path)
-        # imgbb_url = upload_to_imgbb(img_path)
-        # if src_url != None:
-        #     description += f"\nSource: {src_url}"
-        # post_to_fb(imgbb_url, description)
-        # try:
-        #     os.remove(img_path)
-        # except Exception as e:
-        #     log_error("problem deleting file", e)
+        imgbb_url = upload_to_imgbb(img_path)
+        description += f"\nSource: {src_url}"
+        post_to_fb(imgbb_url, description)
+        try:
+            os.remove(img_path)
+        except Exception as e:
+            log_error("problem deleting file", e)
 
     log_info("done", sep="")
     log_info("previous hashes", Provider.prev_hashes)
