@@ -132,8 +132,8 @@ class Story():
 
 class Provider():
 
-    prev_hashes = {'bdnews24.com': 'damon-weaver-child-reporter-who-interviewed-obama-dies-at-23',
-                   'www.dhakatribune.com': '5-sustain-burn-injuries-in-chittagong-blast'}
+    prev_hashes = {'bdnews24.com': '',
+                   'www.dhakatribune.com': ''}
 
     def __init__(self, url):
         self.url = url
