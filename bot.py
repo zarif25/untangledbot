@@ -16,7 +16,7 @@ while True:
 
     for story in stories:
         story.scrape()
-        if not story.is_valid():
+        if story.not_valid():
             continue
         title, description, src, date, img, src_url = story.get_all()
         try:

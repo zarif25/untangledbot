@@ -49,7 +49,7 @@ class Story():
         self.img = self.__get_img()
         self.src_link = self.__get_src_link()
 
-    def is_valid(self):
+    def not_valid(self):
         return None in [
             self.title,
             self.description,
