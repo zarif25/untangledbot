@@ -75,9 +75,8 @@ class Story():
     @exception_handler('src')
     def __get_src(self):
         if self.netloc == 'bdnews24.com':
-            src = self.soup.find(class_='byline').text
             src = (
-                src
+                self.soup.find(class_='byline').text
                 .replace(">", "")
                 .replace(",\n", ", ")
                 .replace("\n", "")
