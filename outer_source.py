@@ -2,7 +2,7 @@ from difflib import SequenceMatcher
 from bs4 import BeautifulSoup
 import requests
 from xml.sax import saxutils as su
-from urllib.parse import quote
+# from urllib.parse import quote
 from logger import log_info
 
 
@@ -11,9 +11,8 @@ def match_accuracy(hash, title):
 
 
 def get_source_link(src, title):
-    src = src.split(',')[-1].strip(' ')
-    query = quote(title + " " + src)
-    res = requests.get(f"https://news.google.com/rss/search?q={query}")
+    src = src.split(',')[-1].strip()
+    res = requests.get(f"https://news.google.com/rss/search?q={title} {src}")
     soup = BeautifulSoup(su.unescape(res.text), 'lxml')
     try:
         first_a_tag = soup.item.a
