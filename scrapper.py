@@ -75,15 +75,16 @@ class Story():
     @exception_handler('src')
     def __get_src(self):
         if self.netloc == 'bdnews24.com':
-            src = self.soup.find(class_='authorName')
-            if not (src and src.text):
-                src = self.soup.find(id='article_notations').p.text
-            else:
-                src = src.text
-            src = src.strip(' >\n')
+            src = self.soup.find(class_='byline').text
+            src = (
+                src
+                .replace(">", "")
+                .replace(",\n", ", ")
+                .replace("\n", "")
+                .strip()
+            )
             if src == '':
                 src = 'bdnews24.com'
-            src = src.split('>')[-1].split('\n')[-1].strip(" >\n")
         elif self.netloc == 'www.dhakatribune.com':
             src = self.soup.a.text.strip(" \n")
             outside_src = ['afp', 'bss', 'reuters',
@@ -121,12 +122,12 @@ class Story():
 
     @exception_handler('source link')
     def __get_src_link(self):
-        src_link = None
-        if self.src != None and self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
-            src_link = self.url
+        if self.src == None:
+            raise Exception("Source link cannot be generated without source")
+        if self.src.endswith(('bdnews24.com', 'Dhaka Tribune')):
+            return self.url
         else:
-            src_link = get_source_link(self.src, self.title)
-        return src_link
+            return get_source_link(self.src, self.title)
 
     def get_all(self):
         return (
