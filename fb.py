@@ -1,9 +1,9 @@
 import requests
 from logger import log_error, log_warning, log_info
-
+from os import getenv
 
 page_id = 104173088514235
-access_token = 'EAA6FiKzFv1MBAEJFttTi5hkBN6TbL3rNx9ATFg7Psh1YOCZA15bELbysfu0WZADA9oZAnLDpblvQZAS6FlZAxRWwY05UldU6knrbdZAE0FD54y1MTAiwwpZBmZBv58WgNIs1MLgXiWUqTzZByMCfIilNXs1SQ4jgSC6lZB7ZBCxxJamxP4W2Lh5oJK1'
+access_token = getenv("FBTOKEN")
 
 
 def post_to_fb(img_url, description, src_url):
