@@ -27,8 +27,7 @@ while True:
         img_path = f'posts\\{story.hash}.PNG'
         post.save(img_path)
         imgbb_url = upload_to_imgbb(img_path)
-        description += f"\nSource: {src_url}"
-        post_to_fb(imgbb_url, description)
+        post_to_fb(imgbb_url, description, src_url)
         try:
             os.remove(img_path)
         except Exception as e:
