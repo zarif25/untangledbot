@@ -16,9 +16,8 @@ while True:
 
     for story in stories:
         story.scrape()
+        if not story.is_valid(): continue
         title, description, src, date, img, src_url = story.get_all()
-        if not src_url:
-            continue
         try:
             post = create_template(title, description, src, date, img, theme)
         except Exception as e:

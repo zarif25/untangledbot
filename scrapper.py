@@ -49,6 +49,15 @@ class Story():
         self.img = self.__get_img()
         self.src_link = self.__get_src_link()
 
+    def is_valid(self):
+        return None in [
+            self.title,
+            self.description,
+            self.src,
+            self.date,
+            self.src_link
+        ]
+
     @exception_handler('title')
     def __get_title(self):
         if self.netloc == 'bdnews24.com':
