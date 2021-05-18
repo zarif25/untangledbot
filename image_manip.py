@@ -102,7 +102,7 @@ def put_title(title_wrapped, spacing_factor, fg_color, draw, height_for_next_ele
 
 
 def put_description(description_wrapped, is_content_short, fg_color, draw, height_for_next_element):
-    if description_wrapped[-1][-1] != '.':
+    if description_wrapped[-1][-1] not in ['.', '?', '!', ',', ':', ';', '"', '\'']:
         description_wrapped[-1] += '.'
     if is_content_short:
         line_height = 70
@@ -211,7 +211,9 @@ def get_description_wrapped(description, is_text_only, title_wrapped):
         description_wrapped = description_wrapped[:description_max_lines]
         i = description_max_lines-1
         while i >= 0:
-            if '.' in description_wrapped[i]:
+            if '.' in description_wrapped[i] or \
+                '?' in description_wrapped[i] or \
+                    '!' in description_wrapped[i]:
                 description_wrapped[i] = '.'.join(
                     description_wrapped[i].split('.')[:-1]) + "."
                 break
