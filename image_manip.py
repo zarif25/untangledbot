@@ -49,7 +49,7 @@ def create_template(title, description, src, date, img, theme):
     # re-wrap description with new font-size
     if is_content_short:
         description = ' '.join(description_wrapped)
-        description_wrapped = textwrap.wrap(description, width=45)
+        description_wrapped = textwrap.wrap(description, width=44)
 
     # theme selection
     template = get_template(is_content_short, is_text_only, theme)
@@ -225,7 +225,7 @@ def get_description_wrapped(description, is_text_only, title_wrapped):
 
 def put_source(draw, src, fill):
     if len(src) > 50:
-        src.split(",")[-1].strip()
+        src = src.split(",")[-1].strip()
     draw.text(
         (100, 1910),
         f'Source: {src}',
