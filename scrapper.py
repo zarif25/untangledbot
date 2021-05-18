@@ -86,7 +86,7 @@ class Story():
                 src = 'bdnews24.com'
         elif self.netloc == 'www.dhakatribune.com':
             src = self.soup.a.text.strip(" \n")
-            outside_src = ['afp', 'bss', 'reuters',
+            outside_src = ['afp', 'bss', 'reuters', 'Scroll.in'
                            'unb', 'new york times', 'washington']
             if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
                 src = "Dhaka Tribune"
