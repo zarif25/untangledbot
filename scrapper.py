@@ -1,4 +1,5 @@
 import requests
+import re
 from logger import log_error, log_warning, log_info
 from bs4 import BeautifulSoup
 from datetime import date, datetime
@@ -92,7 +93,7 @@ class Story():
                 src = "Dhaka Tribune"
             elif not any([o_s in src.lower() for o_s in outside_src]):
                 src += ", Dhaka Tribune"
-        return src
+        return re.sub(src, ", +", ", ")
 
     @exception_handler('date')
     def __get_date(self):
