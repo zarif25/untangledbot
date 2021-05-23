@@ -224,7 +224,7 @@ def get_description_wrapped(description, is_text_only, title_wrapped):
 
 
 def put_source(draw, src, fill):
-    if len(src) > 50:
+    if len(src) > 45:
         src = src.split(",")[-1].strip()
     draw.text(
         (100, 1910),
