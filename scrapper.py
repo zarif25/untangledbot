@@ -82,7 +82,6 @@ class Story():
                 .replace(",\n", ", ")
                 .replace("\n", "")
                 .strip()
-                .strip(',')
             )
             if src == '':
                 src = 'bdnews24.com'
@@ -94,7 +93,8 @@ class Story():
                 src = "Dhaka Tribune"
             elif not any([o_s in src.lower() for o_s in outside_src]):
                 src += ", Dhaka Tribune"
-        return re.sub(src, ", +", ", ")
+        src = re.sub(", +", ", ", src).strip(',')
+        return src
 
     @exception_handler('date')
     def __get_date(self):
