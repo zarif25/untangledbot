@@ -20,7 +20,7 @@ def get_source_link(src, title):
         raise Exception("Problem parsing rss feed", e)
     rss_title = first_a_tag.text
     log_info("RSS TITLE", rss_title)
-    log_info("TITLE", {title})
+    log_info("TITLE", title)
     log_info("match accuracy", match_accuracy(title, rss_title))
     rss_url = first_a_tag['href']
     if match_accuracy(title, rss_title) > 0.70:

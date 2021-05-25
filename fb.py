@@ -10,7 +10,6 @@ def post_to_fb(img_url, title, description, src_url):
     payload = {
         'message': f"{title}\n{description}\nRead more: {src_url}",
         'url': img_url,
-        'formatting':'MARKDOWN',
         'access_token': access_token
     }
 
