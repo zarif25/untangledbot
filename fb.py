@@ -8,7 +8,7 @@ access_token = getenv("FBTOKEN")
 
 def post_to_fb(img_url, title, description, src_url):
     payload = {
-        'message': f"{title}\n\n{description}\nRead more: {src_url}",
+        'message': f"{title}\n\n{description}\n\nRead more: {src_url}",
         'url': img_url,
         'access_token': access_token
     }
