@@ -82,11 +82,12 @@ class Story():
                 .replace(",\n", ", ")
                 .replace("\n", "")
                 .strip()
+                .strip(',')
             )
             if src == '':
                 src = 'bdnews24.com'
         elif self.netloc == 'www.dhakatribune.com':
-            src = self.soup.a.text.strip(" \n")
+            src = self.soup.a.text.strip().strip(" \n,")
             outside_src = ['afp', 'bss', 'reuters', 'Scroll.in'
                            'unb', 'new york times', 'washington']
             if src in ["Tribune Desk", "Showtime Desk", "Tribune Report", "Tribune Editorial"]:
@@ -142,8 +143,8 @@ class Story():
 
 class Provider():
 
-    prev_hashes = {'bdnews24.com': '',
-                   'www.dhakatribune.com': ''}
+    prev_hashes = {'bdnews24.com': 'covid-patient-dies-with-black-fungus-symptoms-in-dhaka',
+                   'www.dhakatribune.com': 'dufs-to-hold-int-l-short-film-fest-invites-filmmakers-to-participate'}
 
     def __init__(self, url):
         self.url = url

@@ -6,7 +6,7 @@ from PIL import Image, ImageFont, ImageDraw
 class Font:
     black = ImageFont.truetype("00_GilroyBlack.ttf", 45)
     bold = ImageFont.truetype("00_GilroyBold.ttf", 95)
-    medium = ImageFont.truetype("00_GilroyMedium.ttf", 44)
+    medium = ImageFont.truetype("00_GilroyMedium.ttf", 45)
     medium_large = ImageFont.truetype("00_GilroyMedium.ttf", 50)
     regular = ImageFont.truetype("00_GilroyRegular.ttf", 40)
 

@@ -6,10 +6,11 @@ page_id = 104173088514235
 access_token = getenv("FBTOKEN")
 
 
-def post_to_fb(img_url, description, src_url):
+def post_to_fb(img_url, title, description, src_url):
     payload = {
-        'message': f"{description}\nRead more: {src_url}",
+        'message': f"{title}\n{description}\nRead more: {src_url}",
         'url': img_url,
+        'formatting':'MARKDOWN',
         'access_token': access_token
     }
 
