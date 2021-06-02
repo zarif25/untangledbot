@@ -4,4 +4,8 @@ graphics
 token.txt
 
 # testing
-test.*
+test*
+temp.PNG
+
+# vscode
+.vscode
