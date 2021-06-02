@@ -13,9 +13,9 @@ while True:
         if story not in previous_stories:
             story_db.insert_story(story)
             previous_stories.append(story)
-            story.save_story_image()
+            # story.save_story_image()
             print(f"new story: {story}") #debug
-            # story.upload_to_fb()
+            story.upload_to_fb()
         else:
             print(f"old story: {story}") #debug
     
