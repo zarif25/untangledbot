@@ -36,12 +36,10 @@ def create_template(title, description, src, date, img, theme):
 
     # formatting
     title_wrapped = textwrap.wrap(title, width=37)
-    description_wrapped = get_description_wrapped(
-        description, is_text_only, title_wrapped)
+    description_wrapped = get_description_wrapped(description, is_text_only, title_wrapped)
 
     # spacing
-    spacing_factor = get_spacing_factor(
-        title_wrapped, description_wrapped, is_text_only)
+    spacing_factor = get_spacing_factor(title_wrapped, description_wrapped, is_text_only)
 
     # set is_content_short
     is_content_short = spacing_factor > 250 and not is_text_only
@@ -102,8 +100,6 @@ def put_title(title_wrapped, spacing_factor, fg_color, draw, height_for_next_ele
 
 
 def put_description(description_wrapped, is_content_short, fg_color, draw, height_for_next_element):
-    if description_wrapped[-1][-1] not in ['.', '?', '!', ',', ':', ';', '"', '\'']:
-        description_wrapped[-1] += '.'
     if is_content_short:
         line_height = 70
         space_left = 150
