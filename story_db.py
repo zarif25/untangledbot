@@ -19,7 +19,7 @@ def __create_table():
 def insert_story(story: Story):
     with conn:
         c.execute("INSERT INTO STORIES (TITLE, URL, DATE) VALUES (?, ?, ?)",
-                  (story.title, story.url, story.date))
+                  (story.title, story.url, story.datetime.strftime("%A, %b %d, %Y")))
 
 
 def insert_stories(stories):
@@ -53,3 +53,8 @@ def delete_old_stories():
                        datetime.today() - timedelta(days=7)]
     __delete_all_stories()
     insert_stories(not_old_stories)
+
+
+if __name__ == '__main__':
+    __drop_table()
+    __create_table()

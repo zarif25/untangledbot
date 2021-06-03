@@ -1,16 +1,55 @@
-from logger import log_info
-from fb_graph_api import GraphAPI
+import logging
 from os import getenv
 
-page_id = 104173088514235
-access_token = getenv("FBTOKEN")
+import requests
 
-# page_id = 103167858653625
-# access_token = "EAANOwCCZAVKsBAPkEzgNS4KIvxhi98tFiUIhdkwBDoBZBrvI5tZBhlvOycptWGQTY6WZAuu7PsjfKIOFnQYIxlXSHol1exraINVFCAudfkV1HZBTKa0bDZBR32XlWEfQVdI8GtmkZB3XAQCyuJ0jqCzt5RmP8ZB8ZAkO8TwFVT4mVvAhkpOrGVQGkLP5MwtpGvasO8iASyjFy298MDBo8p24T"
+from imgbb import upload_story_to_imgbb
+from provider import Story
 
-fb_api = GraphAPI(page_id, access_token)
+logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
-def post_to_fb(img_url, title, description, src_url):
-    message = f"{title}\n\n{description}\n\nRead more: {src_url}"
+
+class GraphAPI:
+    def __init__(self, PAGE_ID: int, ACCESS_TOKEN: str) -> None:
+        self.__ACCESS_TOKEN = ACCESS_TOKEN
+        self.__url = f'https://graph.facebook.com/{PAGE_ID}/photos'
+
+    def post_img(self, message: str, img_url: str) -> str:
+        '''Post image with a message in Facebook
+
+        Args:
+            message: message in the Facebook post
+            img_url: image of the Facebook post (jpg/png/others)
+        Returns:
+            id of the post
+
+        '''
+        payload = {
+            'message': message,
+            'url': img_url,
+            'access_token': self.__ACCESS_TOKEN
+        }
+        res = requests.post(self.__url, data=payload).json()
+        try:
+            return res['id']
+        except Exception:
+            logging.error(res)
+            logging.error("Couldn't post to FB")
+
+
+PAGE_ID = getenv("PAGEID")
+logging.info(f"PAGE_ID: {PAGE_ID}")
+ACCESS_TOKEN = getenv("FBTOKEN")
+logging.info(f"ACCESS_TOKEN: {ACCESS_TOKEN}")
+
+fb_api = GraphAPI(PAGE_ID, ACCESS_TOKEN)
+
+
+def post_story_to_fb(story: Story):
+
+    message = f"{story.title}\n\n{story.details}\n\nRead more: {story.url}"
+    img_url = upload_story_to_imgbb(story)
+
+    logging.info(f"Posting {story} to fb")
     res = fb_api.post_img(message, img_url)
-    log_info("uploaded", f"to fb | {res}")
+    logging.info(f"Posted {story} to fb. Post ID is {res}")

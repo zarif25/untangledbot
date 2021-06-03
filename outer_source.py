@@ -2,10 +2,10 @@ from utils import similarity_between
 from bs4 import BeautifulSoup
 import requests
 from xml.sax import saxutils as su
-from logger import log_info
 
 
 def get_source_link(src, title):
+    # FIXME: [ERROR] problem in get_url_if_does_not_exist ('Problem parsing rss feed', AttributeError("'NoneType' object has no attribute 'a'"))
     if src == None:
         return None
     src = src.split(',')[-1].strip()

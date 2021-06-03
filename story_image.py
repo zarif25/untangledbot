@@ -1,6 +1,8 @@
+import logging
 import math
-from PIL import Image, ImageFont, ImageDraw
 from time import localtime
+
+from PIL import Image, ImageDraw, ImageFont
 
 
 class Font:
@@ -35,25 +37,28 @@ def wrap_text(text: str, font: ImageFont, width: int) -> list:
 
 
 class StoryImage:
-    editable_width: int = 1800  # width of image - right and left margin
+    EDITABLE_WIDTH: int = 1800  # width of image - right and left margin
 
     def __init__(self, story):
-        self.story = story
+        self.__story = story
+        self.__img = self.__get_img()
 
-    def save(self, img_name):
-        if self.story.is_complete():
-            path = img_name+'.PNG'
-            self.__get_img().save(path)
-            return path
+    def save_as(self, img_name):
+        if self.__story.is_complete():
+            self.__img.save(img_name)
+            return img_name
         else:
             raise Exception("Cannot create image from incomplete story")
 
     def __get_img(self):
+        logging.info(f"Creating image for {self.__story}")
         self.__theme = StoryImage.__get_theme()
-        self.__is_text_only = self.story.img == None
+        self.__is_text_only = self.__story.img == None
 
         self.__title = self.__get_title()
+        self.__date = self.__get_date()
         self.__details = self.__get_details()
+        self.__src = self.__get_src()
 
         self.__is_content_short = self.__get_is_content_short()
         self.__template = self.__get_template()
@@ -74,14 +79,17 @@ class StoryImage:
         return 'light' if 3 <= t_hour <= 18 else 'dark'
 
     def __get_title(self):
-        return wrap_text(self.story.title, Font.title, self.editable_width)
+        return wrap_text(self.__story.title, Font.title, self.EDITABLE_WIDTH)
+
+    def __get_date(self) -> str:
+        return self.__story.datetime.strftime("%A, %b %d, %Y")
 
     def __get_details(self):
         # wrap details
         left_rect_and_margin = 50
         right_rect_and_margin = 0 if self.__is_text_only else 650
-        max_width = self.editable_width - right_rect_and_margin - left_rect_and_margin
-        details = wrap_text(self.story.details, Font.details, max_width)
+        max_width = self.EDITABLE_WIDTH - right_rect_and_margin - left_rect_and_margin
+        details = wrap_text(self.__story.details, Font.details, max_width)
 
         # trim details
         if self.__is_text_only:
@@ -115,6 +123,12 @@ class StoryImage:
                 details[-1] = ' '.join(details[-1].split(' ')[:-1])+"..."
         return details
 
+    def __get_src(self) -> str:
+        src = self.__story.src
+        if Font.src.getlength(src) > 1200:
+            src = self.__story.src.split(",")[-1].strip()
+        return src
+
     def __get_is_content_short(self):
         '''
         height of title font is roughly twice the height of details font
@@ -138,6 +152,13 @@ class StoryImage:
             type = ''
         return Image.open(f'00_template{type}_{self.__theme}.png')
 
+    def __get_initial_height_for_next_element(self):
+        if self.__is_text_only:
+            return 1050
+        if self.__is_content_short:
+            return 1240
+        return 100
+
     def __put_image(self):
         if not self.__is_text_only:
             img = self.__get_resized_image()
@@ -147,9 +168,9 @@ class StoryImage:
                 self.__template.paste(img, (100, 870))
 
     def __get_resized_image(self):
-        width = self.editable_width
+        width = self.EDITABLE_WIDTH
         height = 1100 if self.__is_content_short else 1000
-        img = Image.open(self.story.img)
+        img = Image.open(self.__story.img)
 
         # scale
         img_width, img_height = img.size
@@ -165,22 +186,12 @@ class StoryImage:
         return img
 
     def __put_src(self):
-        src = self.story.src
-        if Font.src.getlength(src) > 1200:
-            src = self.story.src.split(",")[-1].strip()
         self.__draw.text(
             (100, 1910),
-            f'Source: {src}',
+            f'Source: {self.__src}',
             fill=self.__fg_color,
             font=Font.src
         )
-
-    def __get_initial_height_for_next_element(self):
-        if self.__is_text_only:
-            return 1050
-        if self.__is_content_short:
-            return 1240
-        return 100
 
     def __put_title(self):
         self.__put_text(
@@ -191,7 +202,7 @@ class StoryImage:
 
     def __put_date(self):
         self.__put_text(
-            [self.story.date],
+            [self.__date],
             Font.date,
             Spacing.date,
         )
@@ -223,7 +234,7 @@ class StoryImage:
             self.__height_for_next_element += padding_top
             self.__draw.rectangle(rect_shape, fill="#868686")
             left_margin += 40
-        
+
         self.__draw.multiline_text(
             (left_margin, self.__height_for_next_element),
             text,

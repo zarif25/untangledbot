@@ -1,23 +1,27 @@
-import requests
 import re
+from datetime import datetime
 from urllib.parse import urlparse
-from logger import log_error, log_info, log_warning
+
+import requests
 from bs4 import BeautifulSoup
-from datetime import date, datetime
+
+import logging
 from outer_source import get_source_link
-from utils import similarity_between, exception_handler
-from fb import post_to_fb
-from imgbb import upload_to_imgbb
 from story_image import StoryImage
+from utils import (exception_handler, remove_symbols, similarity_between,
+                   to_pascal, truncate)
+
+logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
 
 class Story:
     def __init__(self, title, url=None, details=None, src=None, datetime=None, img_url=None):
         self.title = self.__clean_title(title)
+        self.__short_title = truncate(
+            to_pascal(remove_symbols(self.title)), 20)
         self.src = self.__clean_src(src)
         self.url = self.__get_url_if_does_not_exist(url)
         self.datetime = datetime
-        self.date = self.__format_datetime(datetime)
         self.details = self.__clean_details(details)
         self.img = self.__get_img_from_url(img_url)
 
@@ -26,35 +30,15 @@ class Story:
             similarity_between(self.title, other.title) > 0.7
 
     def __repr__(self):
-        return f"Story: <{self.title}>"
-
-    @exception_handler()
-    def __save_story_image(self):
-        StoryImage(self).save('temp')
-
-    # debug
-    @exception_handler()
-    def save_story_image(self):
-        return StoryImage(self).save('temp')
-
-    @exception_handler()
-    def __upload_to_imgbb(self):
-        self.__save_story_image()
-        path = upload_to_imgbb('temp.PNG')
-        return path
-
-    @exception_handler('upload to fb')
-    def upload_to_fb(self):
-        post_to_fb(
-            self.__upload_to_imgbb(),
-            self.title,
-            self.details,
-            self.url
-        )
+        return f"<Story[{self.__short_title}]>"
 
     @exception_handler()
     def is_complete(self) -> bool:
-        return bool(self.title and self.details and self.src and self.date and self.url)
+        return bool(self.title and self.details and self.src and self.datetime and self.url)
+
+    @exception_handler()
+    def get_story_img(self) -> StoryImage:
+        return StoryImage(self)
 
     @exception_handler()
     def __get_img_from_url(self, url: str) -> requests.Response:
@@ -62,36 +46,34 @@ class Story:
             return requests.get(url, stream=True).raw
 
     @exception_handler()
-    def __get_url_if_does_not_exist(self, url):
+    def __get_url_if_does_not_exist(self, url: str) -> str:
         return url or get_source_link(self.src, self.title)
 
     @exception_handler()
-    def __clean_details(self, details):
+    def __clean_details(self, details: str) -> str:
         if details != None:
             return details.strip()
 
     @exception_handler()
-    def __format_datetime(self, datetime: datetime):
-        if datetime != None:
-            return datetime.strftime("%A, %b %d, %Y")
-
-    @exception_handler()
-    def __clean_src(self, src):
+    def __clean_src(self, src: str) -> str:
         if src != None:
             src = re.sub(" {2,}", " ", src).strip(',')
             return src.strip().encode("ascii", "ignore").decode('utf-8')
 
     @exception_handler()
-    def __clean_title(self, title):
+    def __clean_title(self, title: str) -> str:
         return title.strip()
 
 
 class Provider:
     def __init__(self, url):
-        print("="*20)
+        print("_"*20)
         self.name = urlparse(url).netloc
-        log_info("init", self.name)
+        logging.info(f"Initializing {self.name}")
         self.soup = BeautifulSoup(requests.get(url).text, 'lxml')
+
+    def __repr__(self):
+        return f"<Provider[{self.name}]>"
 
     def __get_story_or_none(self, soup, url):
         """
@@ -99,7 +81,10 @@ class Provider:
             a story if a all the properties of a story except url and image
             is successfully extracted, else None
         """
-        log_info("extracting", url or f"Story from {self.name}")
+        if url:
+            logging.info(f"Extracting {url}")
+        else:
+            logging.info(f"Extracting a story from {self}")
         try:
             # title
             title = self.get_story_title(soup)
@@ -129,7 +114,7 @@ class Provider:
 
             return Story(title=title, url=url, details=details, src=src, datetime=date, img_url=img_url)
         except Exception as e:
-            log_error("while extracting", e)
+            logging.error(e)
             return
 
     def get_stories(self) -> list[Story]:
@@ -153,18 +138,22 @@ class RSSProvider(Provider):
         return [(item, None) for item in self.soup.find_all('item')]
 
     @staticmethod
+    @exception_handler()
     def get_story_title(soup):
         return soup.title.text
 
     @staticmethod
+    @exception_handler()
     def get_story_detials(soup):
         return soup.description.text
 
     @staticmethod
+    @exception_handler()
     def get_story_src(soup):
         return soup.source.text
 
     @staticmethod
+    @exception_handler()
     def get_story_date(soup):
         date_str = soup.pubdate.text
         if date_str == None:
@@ -173,10 +162,12 @@ class RSSProvider(Provider):
         return datetime.strptime(date_str, '%d %b %Y')
 
     @staticmethod
+    @exception_handler()
     def get_story_url(soup, src=None, url=None):
         return soup.guid.text
 
     @staticmethod
+    @exception_handler()
     def get_story_img_url(soup):
         try:
             return soup.find('media:content')['url']
@@ -302,3 +293,14 @@ class DHKTribune(Provider):
             return img_url
         except TypeError:
             return
+
+
+if __name__ == '__main__':
+    from time import sleep
+
+    logging.basicConfig(
+        format="[%(levelname)s] %(message)s", level=logging.INFO)
+    stories: list[Story] = []
+    for provider in [Bdnews24, DHKTribune]: #, DStar, TBSNews]:
+        stories.extend(provider().get_stories())
+    sleep(2)
