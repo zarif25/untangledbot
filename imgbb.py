@@ -9,7 +9,7 @@ def upload_to_imgbb(path):
         url = "https://api.imgbb.com/1/upload"
         image = base64.b64encode(file.read())
         payload = {
-            "key": "13f9115b9e666db5b88b10eb11c74e9f",
+            "key": "fa71583282437035672f5f229ae338ff",
             "image": image,
             "expiration": 600
         }
