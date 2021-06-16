@@ -39,4 +39,4 @@ def upload_story_to_imgbb(story):
             return uploaded_url
         except Exception as e:
             logging.error(res.json())
-            logging.error("Could not upload image because " + e)
+            logging.error("Could not upload image because " + str(e))
