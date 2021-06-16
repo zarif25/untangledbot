@@ -24,6 +24,7 @@ class Story:
         self.datetime = datetime
         self.details = self.__clean_details(details)
         self.img = self.__get_img_from_url(img_url)
+        self.img_url = img_url
 
     def __eq__(self, other):
         return (self.url != None and self.url == other.url) or \

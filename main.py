@@ -1,7 +1,6 @@
 import logging
-import time
 from utils import sleep_with_reminder
-
+from wordpress import post_story_to_wp
 import story_db
 from fb import post_story_to_fb
 from provider import Bdnews24, DHKTribune, DStar, Story, TBSNews
@@ -22,7 +21,11 @@ while True:
             story_db.insert_story(story)
             previous_stories.append(story)
             logging.info(f"Working on new story: {story}")
-            post_story_to_fb(story)
+            # post_story_to_fb(story)
+            try:
+                post_story_to_wp(story)
+            except Exception:
+                pass
         else:
             logging.info(f"Skipping old story: {story}")
     sleep_with_reminder(SLEEP_TIME * 60, REMIND_AFTER * 60)
