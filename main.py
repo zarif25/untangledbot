@@ -21,8 +21,8 @@ while True:
             story_db.insert_story(story)
             previous_stories.append(story)
             logging.info(f"Working on new story: {story}")
-            post_story_to_fb(story)
             try:
+                post_story_to_fb(story)
                 post_story_to_wp(story)
             except Exception:
                 pass
