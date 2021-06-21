@@ -1,11 +1,8 @@
 __pycache__/
-config
-graphics
-token.txt
-
-# testing
-test*
-temp.PNG
-
-# vscode
-.vscode
+*.py[cod]
+*$py.class
+test*.py
+old/
+delete_later/
+todo.txt
+env/

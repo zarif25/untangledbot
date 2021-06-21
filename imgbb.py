@@ -1,42 +1,37 @@
 import base64
-import logging
-from os import getenv
-import time
 
 import requests
 
-logging.basicConfig(format="[%(levelname)s] %(message)s", level=logging.INFO)
 
-key = getenv("IMGBBKEY")
-logging.info(f"IMGBBKEY: {key}")
+class ImgbbUploadError(Exception):
+    pass
 
-def upload_story_to_imgbb(story):
-    '''
-    Uploads story image to imgbb
 
-    Args:
-        story: story to upload
+class ImgbbApi():
+    def __init__(self, KEY: int) -> None:
+        self.__KEY = KEY
 
-    Returns:
-        url of the uploaded image
-    '''
-    story_img = story.get_story_img()
-    story_img.save_as('temp.PNG')
-    time.sleep(2)
-    with open('temp.PNG', "rb") as file:
-        url = "https://api.imgbb.com/1/upload"
-        image = base64.b64encode(file.read())
+    def upload_image(self, img_path):
+        '''
+        Uploads story image to imgbb
+
+        Args:
+            img_path: path of image to upload
+
+        Returns:
+            url of the uploaded image
+        '''
+        with open(img_path, "rb") as img_file:
+            image = base64.b64encode(img_file.read())
         payload = {
-            "key": key,
+            "key": self.__KEY,
             "image": image,
             "expiration": 600
         }
-        logging.info(f"Uploading {story} to imgbb")
-        res = requests.post(url, payload)
+        url = "https://api.imgbb.com/1/upload"
         try:
+            res = requests.post(url, payload)
             uploaded_url = res.json()['data']['url']
-            logging.info(f"Uploaded {story} to imgbb. URL is {uploaded_url}")
             return uploaded_url
         except Exception as e:
-            logging.error(res.json())
-            logging.error("Could not upload image because " + str(e))
+            raise ImgbbUploadError(f"Could not upload to imgbb because: {e}")
