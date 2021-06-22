@@ -43,6 +43,7 @@ TOPIC_MAPPING = {
     'education': 'Education',
     'economy': 'Economy',
     'entertainment': 'Entertainment',
+    'showtime': 'Entertainment',
     'travel': 'Travel',
     'literature': 'Literature',
     'uncategorized': 'Others',
