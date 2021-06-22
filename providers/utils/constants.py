@@ -62,4 +62,10 @@ TOPIC_MAPPING = {
     'backpage': 'ignore',
     'frontpage': 'ignore',
     'job': 'ignore',
+    'law-our-rights': 'ignore',  # dstar
+    'people': 'ignore',  # bdnews24
+    'glitz': 'ignore',  # tbs
+    'abroad': 'ignore',  # ittefaq
+    'interviews': 'ignore',  # tbs
+    'columns': 'ignore',  # bntribune
 }
