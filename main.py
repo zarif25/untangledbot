@@ -50,28 +50,31 @@ while True:
         try:
             new_stories = provider().get_stories()
             for story in new_stories:
-                if not story.is_complete():
-                    continue
-                if storydb.exact_same_exists(story):
-                    continue
-                if not storydb.similar_exists(story):
-                    temp_image_path = save_image_from_url_as(story.img_url)
-                    try:
-                        temp_story_image_path = "temp_story_image.PNG"
-                        ImageCreator.from_story(story, temp_image_path).get_image().save(temp_story_image_path)
-                    except UnidentifiedImageError as e:
-                        log_error_to_discord(story.img_url)
-                        raise e
-                    try:
-                        wp_api.post_story(story, temp_image_path)
-                        story_image_url = imgbb_api.upload_image(temp_story_image_path)
-                        fb_caption = f"{story.title}\n\n{story.summary}\nRead more: {story.display_url}\n\nTopic: #{story.topic}"
-                        fb_api.post_image(fb_caption, story_image_url)
-                    except (FbUploadError, ImgbbUploadError) as e:
-                        print(e)
-                    finally:
-                        os.remove(temp_image_path)
-                        os.remove(temp_story_image_path)
+                try:
+                    if not story.is_complete():
+                        continue
+                    if storydb.exact_same_exists(story):
+                        continue
+                    if not storydb.similar_exists(story):
+                        temp_image_path = save_image_from_url_as(story.img_url)
+                        try:
+                            temp_story_image_path = "temp_story_image.PNG"
+                            ImageCreator.from_story(story, temp_image_path).get_image().save(temp_story_image_path)
+                        except UnidentifiedImageError as e:
+                            log_error_to_discord(story.img_url)
+                            raise e
+                        try:
+                            wp_api.post_story(story, temp_image_path)
+                            story_image_url = imgbb_api.upload_image(temp_story_image_path)
+                            fb_caption = f"{story.title}\n\n{story.summary}\nRead more: {story.display_url}\n\nTopic: #{story.topic}"
+                            fb_api.post_image(fb_caption, story_image_url)
+                        except (FbUploadError, ImgbbUploadError) as e:
+                            print(e)
+                        finally:
+                            os.remove(temp_image_path)
+                            os.remove(temp_story_image_path)
+                except Exception as e:
+                    log_error_to_discord(f"Something went wrong while uploading this story:\n{story.base_url}\n" + str(traceback.format_exc()))
                 storydb.insert(story)
         except Exception as e:
             log_error_to_discord("Something went wrong:" + str(traceback.format_exc()))
@@ -81,3 +84,9 @@ while True:
     if hours_passed >= 24:
         storydb.delete_old_stories(3)
         hours_passed = 0
+
+
+"""
+TODO:
+1. dont repeat sources in discord
+"""
