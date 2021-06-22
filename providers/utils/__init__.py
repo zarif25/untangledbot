@@ -64,3 +64,4 @@ def to_untangled_topic_or_none(extracted_topic: str) -> str:
     for key, value in TOPIC_MAPPING.items():
         if key in extracted_topic:
             return value
+    TOPIC_MAPPING[extracted_topic] = 'ignore'
