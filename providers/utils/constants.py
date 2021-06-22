@@ -3,6 +3,7 @@ SOURCE_MAPPING = {
     'bdnews24': 'bdnews24',
     'news desk': 'bdnews24',
     'reuters': "Reuters",
+    'রয়টার্স': "Reuters",
     'scroll.in': "Scroll.in",
     'unb': 'UNB',
     'new york times': 'The New York Times',
