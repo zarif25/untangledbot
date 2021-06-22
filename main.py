@@ -29,8 +29,10 @@ imgbb_api = ImgbbApi(KEY)
 
 USERNAME = getenv("WP_USERNAME")
 PASSWORD = getenv("WP_PW")
-WP_URL = getenv("WP_URL")
-wp_api = WordpressApi(WP_URL, USERNAME, PASSWORD)
+WP_URL_EN = getenv("WP_URL")
+WP_URL_BN = getenv("WP_URL_BN")
+wp_api_en = WordpressApi(WP_URL_EN, USERNAME, PASSWORD)
+wp_api_bn = WordpressApi(WP_URL_BN, USERNAME, PASSWORD)
 
 
 def save_image_from_url_as(url: str) -> str:
@@ -64,7 +66,10 @@ while True:
                             log_error_to_discord(story.img_url)
                             raise e
                         try:
-                            wp_api.post_story(story, temp_image_path)
+                            if story.lang == 'en':
+                                wp_api_en.post_story(story, temp_image_path)
+                            else:
+                                wp_api_bn.post_story(story, temp_image_path)
                             story_image_url = imgbb_api.upload_image(temp_story_image_path)
                             fb_caption = f"{story.title}\n\n{story.summary}\nRead more: {story.display_url}\n\nTopic: #{story.topic}"
                             fb_api.post_image(fb_caption, story_image_url)
