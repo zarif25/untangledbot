@@ -31,7 +31,7 @@ class Bdnews24Story(Story):
 
     @does_not_exist_check('source')
     def get_source(self):
-        source = (self.__soup.find(class_='byline').text)
+        source = self.__soup.find(class_='byline').text.strip()
         for key, value in SOURCE_MAPPING.items():
             if key in source.lower():
                 return value
