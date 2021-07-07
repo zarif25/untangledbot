@@ -13,6 +13,7 @@ SOURCE_MAPPING = {
 TOPIC_MAPPING = {
     'foreign': 'World',
     'world': 'World',
+    'international': 'World',
     'middle-east': 'World',
     'myanmar': 'World',
     'analysis': 'World',
