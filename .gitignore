@@ -6,3 +6,4 @@ old/
 delete_later/
 todo.txt
 env/
+.vscode/
