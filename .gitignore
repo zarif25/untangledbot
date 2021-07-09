@@ -1,7 +1,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-test*.py
+test*
 old/
 delete_later/
 todo.txt
