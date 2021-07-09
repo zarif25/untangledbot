@@ -12,7 +12,7 @@ class WordpressApi:
         "Bangladesh": 13,
         "World": 14,
         "Business": 15,
-        "Sport": 16,
+        "Sports": 16,
         "Entertainment": 17,
         "Education": 18,
         "Technology": 19,
